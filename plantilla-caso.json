@@ -1,0 +1,20 @@
+{
+  "id": "cambia-este-id-unico",
+  "titulo": "Nombre corto del caso",
+  "personas": "Nombre de la o las personas involucradas y su cargo",
+  "partido": "UDI",
+  "sector": "Derecha",
+  "nivel": "Municipal",
+  "comuna": "Providencia",
+  "anioInicio": 2026,
+  "anioFin": null,
+  "monto": 150,
+  "montoNota": "Explicación breve de a qué corresponde ese monto, o null si no aplica",
+  "categoria": "economico",
+  "delito": null,
+  "estadoCategoria": "investigacion",
+  "estado": "Texto corto que se muestra como sello, ej: Formalizado; en prisión preventiva",
+  "descripcion": "2 a 4 frases explicando el caso, en tono neutro, distinguiendo acusación de condena.",
+  "fuente": "https://enlace-a-la-noticia-o-fuente-oficial",
+  "fuenteLabel": "Nombre del medio (ej: La Tercera)"
+}

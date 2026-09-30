@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expediente Público — Casos de corrupción política en Chile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f5f1;
+    --paper-raised:#ffffff;
+    --ink:#161c2b;
+    --ink-soft:#525a6b;
+    --ink-faint:#8790a0;
+    --line:#d9dad2;
+    --line-strong:#b9bbb0;
+    --izq:#a8353a;
+    --izq-bg:#f6e6e5;
+    --centro:#a8791c;
+    --centro-bg:#f3e9d3;
+    --derecha:#2c4c78;
+    --derecha-bg:#e3e9f1;
+    --indep:#5f5470;
+    --indep-bg:#eae5ef;
+    --multi:#3f6f68;
+    --multi-bg:#e2ece9;
+    --stamp:#8b2e2e;
+    --focus:#1c4fd6;
+    color-scheme: light;
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark){
+      --paper:#14161c;
+      --paper-raised:#1c1f28;
+      --ink:#eceef2;
+      --ink-soft:#aeb3c0;
+      --ink-faint:#767c8c;
+      --line:#333744;
+      --line-strong:#454a59;
+      --izq-bg:#3a2224;
+      --centro-bg:#3a3121;
+      --derecha-bg:#1f2c3f;
+      --indep-bg:#2b2534;
+      --multi-bg:#1f302d;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14161c;
+    --paper-raised:#1c1f28;
+    --ink:#eceef2;
+    --ink-soft:#aeb3c0;
+    --ink-faint:#767c8c;
+    --line:#333744;
+    --line-strong:#454a59;
+    --izq-bg:#3a2224;
+    --centro-bg:#3a3121;
+    --derecha-bg:#1f2c3f;
+    --indep-bg:#2b2534;
+    --multi-bg:#1f302d;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Source Serif 4', Georgia, serif;}
+  .mono{font-family:'IBM Plex Mono', ui-monospace, monospace;}
+  a{color:inherit;}
+  ::selection{background:var(--focus); color:#fff;}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+  img,svg{max-width:100%;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding:56px 0 40px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:48px;
+    align-items:end;
+  }
+  .hero h1{
+    font-size:clamp(2rem, 4.4vw, 3.2rem);
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 18px;
+  }
+  .hero p.lede{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:56ch;
+    margin:0;
+  }
+  .hero-figure{
+    text-align:left;
+  }
+  .hero-figure .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    font-weight:600;
+    line-height:1;
+    color:var(--stamp);
+  }
+  .hero-figure .num-label{
+    color:var(--ink-soft);
+    font-size:0.92rem;
+    margin-top:6px;
+    max-width:34ch;
+  }
+  .site-tag{
+    display:flex; align-items:center; gap:10px;
+    font-size:0.82rem; color:var(--ink-faint);
+    margin-bottom:22px;
+  }
+  .site-tag .mark{
+    width:9px; height:9px; border-radius:1px; background:var(--stamp);
+    display:inline-block; transform:rotate(45deg);
+  }
+
+  /* ---------- DISCLAIMER ---------- */
+  .disclaimer{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--stamp);
+    padding:18px 22px;
+    margin:28px 0 0;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+  }
+  .disclaimer strong{color:var(--ink);}
+
+  /* ---------- KPI STRIP ---------- */
+  .kpi-strip{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    margin:44px 0;
+  }
+  .kpi{
+    padding:22px 24px;
+    border-right:1px solid var(--line);
+  }
+  .kpi:last-child{border-right:none;}
+  .kpi .val{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1.7rem;
+    font-weight:600;
+  }
+  .kpi .lbl{
+    color:var(--ink-soft);
+    font-size:0.84rem;
+    margin-top:4px;
+  }
+
+  /* ---------- LAYOUT: FILTERS + CONTENT ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns:270px 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  aside.filters{
+    position:sticky; top:20px;
+    border:1px solid var(--line);
+    background:var(--paper-raised);
+    padding:20px;
+  }
+  aside.filters h3{
+    margin:0 0 14px;
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    font-weight:600;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .filter-block{margin-bottom:22px;}
+  .filter-block:last-child{margin-bottom:0;}
+  input[type="search"]{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:inherit;
+    font-size:0.9rem;
+  }
+  .chip-row{display:flex; flex-wrap:wrap; gap:6px;}
+  .check-list{ display:flex; flex-direction:column; gap:8px; }
+  .check-list-scroll{ max-height:230px; overflow-y:auto; padding-right:6px; }
+  .check-item{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.85rem; color:var(--ink-soft); cursor:pointer; line-height:1.3;
+  }
+  .check-item:hover{ color:var(--ink); }
+  .check-item input[type="checkbox"]{
+    width:15px; height:15px; flex-shrink:0; cursor:pointer; accent-color:var(--ink);
+    margin:0;
+  }
+  .check-item .check-dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .check-list-tools{
+    display:flex; gap:10px; margin-bottom:8px;
+  }
+  .check-list-tools button{
+    background:none; border:none; padding:0; font-size:0.74rem; color:var(--focus);
+    cursor:pointer; font-family:inherit; text-decoration:underline;
+  }
+  .chip{
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink-soft);
+    padding:5px 10px;
+    font-size:0.82rem;
+    cursor:pointer;
+    user-select:none;
+    font-family:'IBM Plex Sans',sans-serif;
+    transition:background .12s, color .12s, border-color .12s;
+  }
+  .chip[aria-pressed="true"]{
+    color:#fff;
+    border-color:transparent;
+  }
+  .chip.izq[aria-pressed="true"]{background:var(--izq);}
+  .chip.centro[aria-pressed="true"]{background:var(--centro);}
+  .chip.derecha[aria-pressed="true"]{background:var(--derecha);}
+  .chip.indep[aria-pressed="true"]{background:var(--indep);}
+  .chip.multi[aria-pressed="true"]{background:var(--multi);}
+  .chip.neutral[aria-pressed="true"]{background:var(--ink);}
+  .chip:hover{border-color:var(--ink-faint);}
+
+  select#partido-select{
+    width:100%;
+    padding:8px 9px;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:inherit;
+    font-size:0.86rem;
+  }
+
+  .year-range{margin-top:6px;}
+  .year-labels{
+    display:flex; justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .range-wrap{position:relative; height:28px;}
+  .range-wrap input[type=range]{
+    position:absolute; width:100%; top:8px;
+    -webkit-appearance:none; appearance:none;
+    background:transparent; pointer-events:none;
+    margin:0;
+  }
+  .range-wrap input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; pointer-events:auto;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--ink); cursor:pointer; margin-top:-6px;
+    border:2px solid var(--paper-raised);
+  }
+  .range-wrap input[type=range]::-moz-range-thumb{
+    pointer-events:auto; width:14px; height:14px; border-radius:50%;
+    background:var(--ink); cursor:pointer; border:2px solid var(--paper-raised);
+  }
+  .range-wrap input[type=range]::-webkit-slider-runnable-track{height:2px; background:transparent;}
+  .range-track{
+    position:absolute; top:13px; left:0; right:0; height:2px; background:var(--line-strong);
+  }
+  .range-fill{
+    position:absolute; top:13px; height:2px; background:var(--ink);
+  }
+
+  button.reset-btn{
+    margin-top:18px;
+    width:100%;
+    padding:9px;
+    background:transparent;
+    border:1px solid var(--line-strong);
+    color:var(--ink-soft);
+    font-family:inherit;
+    font-size:0.82rem;
+    cursor:pointer;
+  }
+  button.reset-btn:hover{border-color:var(--ink); color:var(--ink);}
+
+  .filter-count{
+    font-size:0.8rem; color:var(--ink-faint); margin-top:4px;
+  }
+
+  /* ---------- MAIN COLUMN ---------- */
+  main section{margin-bottom:56px;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--line);
+    padding-bottom:10px; margin-bottom:24px;
+  }
+  .section-head h2{
+    font-size:1.3rem; font-weight:600; margin:0;
+  }
+  .section-head .meta{
+    font-size:0.82rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace;
+  }
+
+  /* charts */
+  .charts-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:40px;
+  }
+  .donut-block{display:flex; gap:26px; align-items:center;}
+  .donut{
+    width:168px; height:168px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .donut-hole{
+    width:96px; height:96px; border-radius:50%; background:var(--paper-raised);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .donut-hole .n{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:1.3rem;}
+  .donut-hole .t{font-size:0.68rem; color:var(--ink-faint); text-align:center; line-height:1.2; margin-top:2px;}
+  .pie{
+    width:168px; height:168px; border-radius:50%; flex-shrink:0;
+    border:1px solid var(--line);
+  }
+  .legend{display:flex; flex-direction:column; gap:9px;}
+  .legend-item{display:flex; align-items:center; gap:9px; font-size:0.88rem;}
+  .legend-dot{width:10px; height:10px; flex-shrink:0;}
+  .legend-item .pct{font-family:'IBM Plex Mono',monospace; margin-left:auto; padding-left:14px; font-weight:600;}
+  .legend-note{font-size:0.78rem; color:var(--ink-faint); margin-top:8px; max-width:40ch;}
+
+  .barlist{display:flex; flex-direction:column; gap:12px;}
+  .barlist-row{}
+  .barlist-head{
+    display:flex; justify-content:space-between; font-size:0.86rem; margin-bottom:4px;
+  }
+  .barlist-head .amt{font-family:'IBM Plex Mono',monospace; color:var(--ink-soft);}
+  .barlist-track{height:9px; background:var(--line); position:relative;}
+  .barlist-fill{height:100%; }
+  .tabs{display:flex; gap:4px; margin-bottom:16px;}
+  .tab-btn{
+    padding:6px 12px; font-size:0.8rem; border:1px solid var(--line-strong);
+    background:var(--paper); color:var(--ink-soft); cursor:pointer; font-family:inherit;
+  }
+  .tab-btn[aria-selected="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative;}
+  .year-group{margin-bottom:6px;}
+  .year-head{
+    position:sticky; top:0; z-index:2;
+    background:var(--paper);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:1.05rem; font-weight:600;
+    padding:14px 0 10px;
+    border-bottom:1px solid var(--line-strong);
+    margin-bottom:4px;
+  }
+  .case-card{
+    display:grid;
+    grid-template-columns:15px 1fr;
+    gap:16px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .case-dot-col{display:flex; justify-content:center; padding-top:6px;}
+  .case-dot{width:9px; height:9px; margin-top:3px;}
+  .case-top{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:8px;
+  }
+  .tag{
+    font-size:0.72rem; padding:2px 8px; font-family:'IBM Plex Sans',sans-serif;
+    font-weight:600; letter-spacing:0.02em;
+  }
+  .tag.sector-izq{background:var(--izq-bg); color:var(--izq);}
+  .tag.sector-centro{background:var(--centro-bg); color:var(--centro);}
+  .tag.sector-derecha{background:var(--derecha-bg); color:var(--derecha);}
+  .tag.sector-indep{background:var(--indep-bg); color:var(--indep);}
+  .tag.sector-multi{background:var(--multi-bg); color:var(--multi);}
+  .tag.nivel{border:1px solid var(--line-strong); color:var(--ink-faint); background:transparent;}
+  .stamp-badge{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.7rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+    padding:3px 9px; border:1.5px solid; display:inline-block;
+    transform:rotate(-1.2deg);
+  }
+  .stamp-badge.st-condenado{color:var(--stamp); border-color:var(--stamp);}
+  .stamp-badge.st-formalizado{color:#a8631c; border-color:#a8631c;}
+  .stamp-badge.st-investigacion{color:var(--ink-soft); border-color:var(--ink-soft);}
+  .stamp-badge.st-cerrado{color:var(--ink-faint); border-color:var(--line-strong);}
+
+  .case-card h3{
+    margin:2px 0 4px; font-size:1.08rem; font-weight:600;
+  }
+  .case-people{font-size:0.86rem; color:var(--ink-soft); margin-bottom:8px;}
+  .case-desc{font-size:0.92rem; color:var(--ink); max-width:74ch; margin-bottom:10px;}
+  .case-foot{
+    display:flex; flex-wrap:wrap; gap:16px; align-items:center;
+    font-size:0.84rem; color:var(--ink-soft);
+  }
+  .case-amount{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--ink);}
+  .case-amount-note{color:var(--ink-faint); font-size:0.78rem; display:block; max-width:60ch; margin-top:2px;}
+  .case-foot a{
+    color:var(--focus); text-decoration:none; border-bottom:1px solid transparent;
+    font-size:0.84rem;
+  }
+  .case-foot a:hover{border-bottom-color:var(--focus);}
+  .estado-detail{font-style:italic; color:var(--ink-soft);}
+
+  .empty-state{
+    padding:60px 20px; text-align:center; color:var(--ink-faint); border:1px dashed var(--line-strong);
+  }
+  .empty-state .big{font-size:1.4rem; font-family:'Source Serif 4',serif; color:var(--ink-soft); margin-bottom:8px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0 60px;
+    font-size:0.86rem;
+    color:var(--ink-soft);
+  }
+  footer h4{color:var(--ink); font-size:0.92rem; margin:0 0 10px;}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px;}
+  .foot-grid ul{margin:0; padding:0; list-style:none;}
+  .foot-grid li{margin-bottom:6px;}
+  .foot-grid a{color:var(--ink-soft); text-decoration:underline; text-decoration-color:var(--line-strong);}
+
+  /* ---------- VIEW TABS ---------- */
+  .view-tabs{
+    display:flex; gap:0;
+    border-bottom:1px solid var(--line);
+    max-width:1180px; margin:0 auto; padding:0 24px;
+  }
+  .view-tab-btn{
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:0.94rem; font-weight:600;
+    padding:14px 20px 12px;
+    background:transparent; border:none; border-bottom:2px solid transparent;
+    color:var(--ink-faint); cursor:pointer; margin-bottom:-1px;
+  }
+  .view-tab-btn[aria-selected="true"]{ color:var(--ink); border-bottom-color:var(--stamp); }
+  .view-tab-btn:hover{ color:var(--ink); }
+
+  /* ---------- MAP ---------- */
+  .mapa-grid{ display:grid; grid-template-columns:1fr 340px; gap:32px; align-items:start; }
+  .mapa-strip{
+    border:1px solid var(--line); background:var(--paper-raised);
+    padding:4px 20px 14px;
+  }
+  .mapa-compass{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:var(--ink-faint);
+    letter-spacing:0.08em; padding:8px 0; border-bottom:1px dashed var(--line);
+  }
+  .region-band{
+    display:grid; grid-template-columns:128px 1fr;
+    gap:10px; align-items:stretch;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .region-band:last-child{ border-bottom:none; }
+  .region-name{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.74rem; color:var(--ink-soft);
+    padding-top:8px; line-height:1.3;
+  }
+  .region-count{ color:var(--ink-faint); display:block; font-size:0.7rem; margin-top:2px; }
+  .region-landmass-wrap{ position:relative; min-height:34px; }
+  .region-landmass{
+    background:var(--paper); border-left:2px solid var(--line-strong); border-right:2px solid var(--line-strong);
+    display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center;
+    min-height:34px; padding:6px 12px;
+    transition:margin-left .15s, width .15s;
+  }
+  .comuna-empty{ color:var(--ink-faint); font-size:0.74rem; }
+  .comuna-marker{
+    display:flex; align-items:center; gap:6px;
+    background:transparent; border:none; cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif; font-size:0.8rem; color:var(--ink);
+    padding:2px 4px;
+  }
+  .comuna-marker:hover .dot, .comuna-marker.active .dot{ box-shadow:0 0 0 3px var(--line-strong); }
+  .comuna-marker.active{ font-weight:600; }
+  .comuna-marker .dot{
+    border-radius:50%; flex-shrink:0; display:inline-block;
+  }
+  .mapa-panel{
+    position:sticky; top:20px;
+    border:1px solid var(--line); background:var(--paper-raised);
+    padding:20px; min-height:200px;
+  }
+  .mapa-panel-empty{ color:var(--ink-faint); font-size:0.9rem; }
+  .mapa-panel h3{ font-size:1.05rem; margin:0 0 4px; font-weight:600; }
+  .mapa-panel .panel-meta{ font-size:0.8rem; color:var(--ink-faint); margin-bottom:14px; font-family:'IBM Plex Mono',monospace; }
+  .mapa-case{ padding:14px 0; border-top:1px solid var(--line); }
+  .mapa-case:first-of-type{ border-top:none; padding-top:0; }
+  .mapa-case h4{ font-size:0.94rem; margin:0 0 6px; font-weight:600; }
+  .mapa-case p{ font-size:0.85rem; color:var(--ink-soft); margin:0 0 8px; }
+  .mapa-case a{ font-size:0.82rem; color:var(--focus); text-decoration:none; }
+  .mapa-case a:hover{ text-decoration:underline; }
+  .mapa-close{
+    background:transparent; border:1px solid var(--line-strong); color:var(--ink-soft);
+    font-size:0.78rem; padding:5px 10px; cursor:pointer; margin-bottom:14px; font-family:inherit;
+  }
+  .mapa-svg-title{ font-size:0.8rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; padding:10px 4px 4px; }
+  .mapa-svg{ width:100%; height:auto; display:block; }
+  .mapa-svg-country{ max-height:640px; margin:0 auto; }
+  .map-poly-g{ cursor:pointer; }
+  .map-poly{ stroke:var(--paper-raised); stroke-width:1.5; transition:opacity .12s, filter .12s; }
+  .map-poly-g:hover .map-poly{ filter:brightness(0.92); }
+  .map-poly-g.active .map-poly{ stroke:var(--ink); stroke-width:3; }
+  .map-poly-g.metro .map-poly{ stroke:var(--stamp); stroke-width:2; stroke-dasharray:4 2; }
+  .map-poly-label{
+    font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600;
+    fill:var(--ink); text-anchor:middle; dominant-baseline:middle; pointer-events:none;
+    paint-order:stroke; stroke:var(--paper-raised); stroke-width:3px;
+  }
+  .mapa-back{
+    background:transparent; border:1px solid var(--line-strong); color:var(--ink-soft);
+    font-size:0.82rem; padding:6px 12px; cursor:pointer; margin-bottom:6px; font-family:inherit;
+  }
+  .mapa-back:hover{ border-color:var(--ink); color:var(--ink); }
+  .mapa-outside{
+    border-top:1px solid var(--line); margin-top:12px; padding-top:12px;
+    display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:0.8rem; color:var(--ink-faint);
+  }
+
+  @media (max-width: 880px){
+    .mapa-grid{ grid-template-columns:1fr; }
+    .region-band{ grid-template-columns:1fr; gap:4px; }
+    .region-landmass{ margin-left:0 !important; width:100% !important; }
+    .mapa-panel{ position:relative; top:0; }
+  }
+
+  @media (max-width: 880px){
+    .hero-grid{grid-template-columns:1fr; gap:24px;}
+    .kpi-strip{grid-template-columns:1fr 1fr;}
+    .kpi:nth-child(2){border-right:none;}
+    .kpi:nth-child(3),.kpi:nth-child(4),.kpi:nth-child(5){border-top:1px solid var(--line);}
+    .kpi:nth-child(5){border-right:none;}
+    .layout{grid-template-columns:1fr;}
+    aside.filters{position:relative; top:0;}
+    .charts-grid{grid-template-columns:1fr; gap:32px;}
+    .foot-grid{grid-template-columns:1fr; gap:24px;}
+    .donut-block{flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="site-tag"><span class="mark"></span>Expediente Público · Corrupción política en Chile</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Antes de votar, revisa el historial.</h1>
+        <p class="lede">Una base de datos filtrable de casos ligados a partidos políticos e independientes en Chile: fraude, malversación, cohecho y financiamiento irregular, además de delitos sexuales, violencia intrafamiliar y otras causas sin dinero público involucrado — con línea de tiempo, montos y estado judicial de cada causa.</p>
+      </div>
+      <div class="hero-figure">
+        <div class="num mono" id="hero-total-monto">—</div>
+        <div class="num-label">millones de pesos documentados en las causas económicas de este expediente, sumando lo reportado por fiscalía, Contraloría y prensa</div>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <strong>Presunción de inocencia.</strong> Mientras no exista sentencia firme, toda persona se presume inocente. Este expediente distingue expresamente entre <em>investigaciones abiertas</em>, <em>formalizaciones o imputaciones</em> (cargos presentados, sin condena) y <em>condenas</em>. Los datos provienen de reportajes periodísticos, Contraloría General de la República y el Ministerio Público — cada caso enlaza a su fuente. La clasificación de sector político (izquierda/centro/derecha) de personas independientes sigue la afinidad reportada en prensa y es una simplificación con fines informativos, no una afiliación formal. Los casos marcados como <em>"sin dinero involucrado"</em> (delitos sexuales, violencia intrafamiliar u otros) se muestran separados de los casos de corrupción económica y no se incluyen en sus gráficos de montos ni en el índice de sector político por corrupción; en las causas por delitos sexuales se evita todo detalle que no sea necesario para entender el estado judicial, y no se identifica a las personas denunciantes.
+    </div>
+  </header>
+
+  <nav class="view-tabs" aria-label="Vista">
+    <button class="view-tab-btn" data-view="timeline" aria-selected="true">Línea de tiempo</button>
+    <button class="view-tab-btn" data-view="mapa" aria-selected="false">Mapa de comunas</button>
+    <button class="view-tab-btn" data-view="nodinero" aria-selected="false">Sin dinero involucrado</button>
+  </nav>
+
+  <div class="kpi-strip" id="kpi-strip"></div>
+
+  <div class="layout">
+    <aside class="filters" aria-label="Filtros">
+      <div class="filter-block">
+        <h3>Buscar</h3>
+        <input type="search" id="search-input" placeholder="Nombre, comuna, partido…">
+      </div>
+
+      <div class="filter-block">
+        <h3>Sector político</h3>
+        <div class="check-list" id="sector-chips"></div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Partido / militancia</h3>
+        <div class="check-list-tools">
+          <button type="button" id="partido-todos">Todos</button>
+          <button type="button" id="partido-ninguno">Ninguno</button>
+        </div>
+        <div class="check-list check-list-scroll" id="partido-checks"></div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Estado judicial</h3>
+        <div class="check-list" id="estado-chips"></div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Nivel</h3>
+        <div class="check-list" id="nivel-chips"></div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Rango de años</h3>
+        <div class="year-range">
+          <div class="year-labels">
+            <span id="year-min-label">—</span>
+            <span id="year-max-label">—</span>
+          </div>
+          <div class="range-wrap">
+            <div class="range-track"></div>
+            <div class="range-fill" id="range-fill"></div>
+            <input type="range" id="year-min" step="1">
+            <input type="range" id="year-max" step="1">
+          </div>
+        </div>
+      </div>
+
+      <button class="reset-btn" id="reset-btn">Limpiar filtros</button>
+      <div class="filter-count" id="filter-count"></div>
+    </aside>
+
+    <main>
+      <div id="view-timeline">
+        <section id="charts-section">
+          <div class="section-head">
+            <h2>Radiografía de los casos</h2>
+            <span class="meta" id="charts-meta"></span>
+          </div>
+          <div class="charts-grid">
+            <div>
+              <h3 style="font-size:0.95rem; margin:0 0 14px; font-weight:600;">Distribución por sector político</h3>
+              <div class="donut-block">
+                <div class="donut" id="donut"></div>
+                <div class="legend" id="donut-legend"></div>
+              </div>
+              <p class="legend-note">Calculado sobre casos con un único partido claramente identificado (excluye causas multipartidistas como el Caso SQM y causas sin militancia como el Caso Caval).</p>
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h3 style="font-size:0.95rem; margin:0; font-weight:600;">Montos acumulados</h3>
+                <div class="tabs" id="bar-tabs">
+                  <button class="tab-btn" data-mode="partido" aria-selected="true">Por partido</button>
+                  <button class="tab-btn" data-mode="sector" aria-selected="false">Por sector</button>
+                </div>
+              </div>
+              <div class="barlist" id="barlist"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="timeline-section">
+          <div class="section-head">
+            <h2>Línea de tiempo</h2>
+            <span class="meta" id="timeline-meta"></span>
+          </div>
+          <div class="timeline" id="timeline"></div>
+        </section>
+      </div>
+
+      <div id="view-mapa" style="display:none;">
+        <section id="mapa-section">
+          <div class="section-head">
+            <h2>Mapa de comunas</h2>
+            <span class="meta" id="mapa-meta"></span>
+          </div>
+          <p class="legend-note" style="margin-bottom:20px;">Mapa de Chile con contornos reales, trazados por procesamiento de imagen a partir de mapas de referencia (no son límites oficiales del SII/BCN, pero sí formas reales, no esquemáticas). El color de cada región indica el sector político de sus casos (gris si hay más de uno) y el número, cuántos casos tiene. Haz clic en una región para ver sus casos, o en <strong>Metropolitana</strong> para abrir el detalle comuna por comuna del Gran Santiago. Los casos nacionales sin comuna asociada (Penta, SQM, Caso Hermosilla, etc.) no aparecen aquí — revísalos en la Línea de tiempo.</p>
+          <div class="mapa-grid">
+            <div class="mapa-strip" id="mapa-strip"></div>
+            <div class="mapa-panel" id="mapa-panel">
+              <div class="mapa-panel-empty">Selecciona una comuna en el mapa para ver sus casos.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div id="view-nodinero" style="display:none;">
+        <section id="nodinero-section">
+          <div class="section-head">
+            <h2>Casos sin dinero involucrado</h2>
+            <span class="meta" id="nodinero-meta"></span>
+          </div>
+          <div class="disclaimer" style="margin:0 0 24px;">
+            <strong>Presunción de inocencia.</strong> Estos casos (delitos sexuales, violencia intrafamiliar u otros) se muestran separados de los casos de corrupción económica porque no tiene sentido compararlos en el mismo índice o gráfico de montos. Se describen al nivel de los cargos formales y el estado judicial, sin detalles adicionales, y ninguno identifica a las personas denunciantes.
+          </div>
+          <div style="max-width:420px; margin-bottom:36px;">
+            <h3 style="font-size:0.95rem; margin:0 0 14px; font-weight:600;">Distribución por sector político</h3>
+            <div class="donut-block">
+              <div class="pie" id="nodinero-pie"></div>
+              <div class="legend" id="nodinero-pie-legend"></div>
+            </div>
+            <p class="legend-note">Gráfico de torta sobre el total de casos de esta categoría (sin dinero involucrado), con los filtros de la barra lateral aplicados.</p>
+          </div>
+          <div class="timeline" id="nodinero-timeline"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <h4>Metodología</h4>
+        <p>Este expediente reúne casos con cobertura periodística o de organismos públicos (Ministerio Público, Contraloría General de la República) entre 2002 y 2026. Los montos están expresados en millones de pesos chilenos (CLP) tal como fueron reportados por la fuente citada en cada caso; cuando el monto corresponde a una imputación o querella, no representa un perjuicio comprobado judicialmente. Los casos "sin dinero involucrado" (delitos sexuales, violencia intrafamiliar u otros) se listan por separado; al ser materias especialmente sensibles, sólo se incluyen causas con cobertura de medios establecidos y se describen al nivel de los cargos y el estado judicial, sin detalles adicionales. Última actualización de este expediente: septiembre de 2026.</p>
+      </div>
+      <div>
+        <h4>Fuentes principales</h4>
+        <ul>
+          <li><a href="https://www.elmostrador.cl/noticias/pais/2024/04/15/alcaldes-y-municipios-implicados-en-casos-de-corrupcion/" target="_blank" rel="noopener">El Mostrador — corrupción municipal</a></li>
+          <li><a href="https://www.ciperchile.cl/2025/10/23/las-verdaderas-cifras-del-caso-sqm-10-condenados-132-acogidos-a-salida-alternativa-4-600-millones-recaudados-por-el-fisco-y-8-absueltos/" target="_blank" rel="noopener">CIPER Chile — Caso SQM</a></li>
+          <li><a href="https://es.wikipedia.org/wiki/Corrupci%C3%B3n_en_Chile" target="_blank" rel="noopener">Wikipedia — Corrupción en Chile</a></li>
+          <li>Cooperativa, La Tercera, El Dínamo, Diario UChile, T13, Ex-Ante, CNN Chile (ver enlaces en cada caso)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Sobre este expediente</h4>
+        <p>Proyecto informativo independiente, sin fines partidistas, creado para apoyar el voto informado. No sustituye el trabajo de fiscalía ni de tribunales. Si detectas un error o una actualización pendiente en algún caso, contrástalo con la fuente citada.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* =======================================================================
+   DATA
+   ======================================================================= */
+let CASES = []; // se carga desde casos.json al iniciar
+
+/* =======================================================================
+   STATE + HELPERS
+   ======================================================================= */
+/* Ubicación aproximada (solo para agrupar por región, de norte a sur) de las comunas
+   presentes en el expediente. No pretende precisión cartográfica. */
+const REGIONES_ORDEN = [
+  "Arica y Parinacota","Tarapacá","Antofagasta","Atacama","Coquimbo","Valparaíso",
+  "Metropolitana","O'Higgins","Maule","Ñuble","Biobío","La Araucanía",
+  "Los Ríos","Los Lagos","Aysén","Magallanes"
+];
+const COMUNA_REGION = {
+  "La Florida":"Metropolitana", "Maipú":"Metropolitana", "San Bernardo":"Metropolitana",
+  "Las Condes":"Metropolitana", "Lampa":"Metropolitana", "Vitacura":"Metropolitana",
+  "Estación Central":"Metropolitana", "Lo Barnechea":"Metropolitana", "Melipilla":"Metropolitana",
+  "San Ramón":"Metropolitana", "Puente Alto":"Metropolitana", "Santiago":"Metropolitana",
+  "Ñuñoa":"Metropolitana", "Providencia":"Metropolitana", "Recoleta":"Metropolitana",
+  "Buin":"Metropolitana",
+  "Viña del Mar":"Valparaíso", "Rinconada":"Valparaíso", "Algarrobo":"Valparaíso", "Valparaíso":"Valparaíso",
+  "San Fernando":"O'Higgins", "Rancagua":"O'Higgins", "Mostazal":"O'Higgins", "Machalí":"O'Higgins",
+  "Sagrada Familia":"Maule", "Linares":"Maule",
+  "Tierra Amarilla":"Atacama",
+  "Calama":"Antofagasta", "Antofagasta":"Antofagasta",
+  "Río Bueno":"Los Ríos",
+  "Guaitecas":"Aysén",
+  "Puerto Natales":"Magallanes",
+  "La Araucanía":"La Araucanía", "Lumaco":"La Araucanía"
+};
+function normalizeComuna(raw){
+  if(!raw) return null;
+  return raw.replace(/\s*\(.*?\)\s*$/,'').trim();
+}
+
+/* Polígonos reales extraídos por procesamiento de imagen a partir de los mapas de referencia
+   proporcionados por el usuario (agrupación de píxeles por color + detección de contornos),
+   escalados a un viewBox compacto. No son datos oficiales del SII/BCN, pero sí formas reales
+   trazadas desde un mapa real, no una aproximación esquemática. */
+const CHILE_SVG = {"viewW":341,"viewH":758,"regions":{"Arica y Parinacota":[[169,0],[164,4],[163,8],[163,12],[160,16],[153,20],[151,24],[151,28],[151,32],[152,36],[154,40],[155,44],[155,48],[156,52],[159,56],[160,58],[193,58],[193,56],[193,52],[194,48],[195,44],[194,40],[191,36],[191,32],[191,28],[186,24],[186,20],[186,16],[181,12],[177,8],[174,4],[171,0]],"Tarapacá":[[160,59],[160,63],[160,67],[160,71],[160,75],[160,79],[160,83],[160,87],[160,91],[161,95],[161,99],[161,103],[161,107],[161,111],[160,112],[228,112],[220,111],[213,107],[213,103],[212,99],[208,95],[207,91],[207,87],[207,83],[204,79],[202,75],[198,71],[196,67],[193,63],[193,59]],"Antofagasta":[[160,113],[160,117],[159,121],[154,125],[156,129],[156,133],[156,137],[156,141],[154,145],[156,149],[156,153],[156,157],[159,161],[159,165],[159,169],[159,173],[159,177],[157,181],[157,185],[160,189],[160,193],[160,197],[160,201],[160,202],[208,202],[207,201],[206,197],[206,193],[206,189],[207,185],[206,181],[206,177],[206,173],[206,169],[207,165],[207,161],[207,157],[212,153],[216,149],[222,145],[227,141],[228,137],[229,133],[230,129],[231,125],[232,121],[231,117],[229,113]],"Atacama":[[160,203],[160,207],[159,211],[158,215],[158,219],[157,223],[156,227],[155,231],[154,235],[154,239],[154,243],[152,247],[150,251],[150,255],[151,259],[154,263],[154,265],[184,265],[184,263],[184,259],[184,255],[184,251],[185,247],[185,243],[190,239],[191,235],[191,231],[194,227],[201,223],[201,219],[201,215],[204,211],[208,207],[208,203]],"Coquimbo":[[154,266],[154,270],[154,274],[153,278],[150,282],[150,286],[150,290],[150,294],[151,298],[151,302],[152,306],[153,310],[153,314],[155,318],[155,319],[180,319],[180,318],[179,314],[176,310],[176,306],[176,302],[177,298],[178,294],[179,290],[179,286],[182,282],[184,278],[184,274],[184,270],[184,266]],"Valparaíso":[[155,320],[155,324],[155,328],[155,332],[154,336],[153,340],[153,344],[153,348],[153,349],[191,349],[191,348],[191,344],[190,340],[190,336],[187,332],[184,328],[183,324],[180,320]],"Metropolitana":[[153,350],[153,354],[150,358],[150,362],[150,366],[150,370],[150,372],[185,372],[186,370],[191,366],[191,362],[192,358],[191,354],[191,350]],"O'Higgins":[[150,373],[150,377],[148,381],[148,385],[145,389],[144,393],[143,397],[137,401],[137,401],[185,401],[185,401],[185,397],[185,393],[187,389],[187,385],[185,381],[185,377],[185,373]],"Maule":[[137,402],[138,406],[138,410],[138,414],[138,418],[136,422],[136,426],[136,428],[175,428],[175,426],[175,422],[175,418],[182,414],[182,410],[184,406],[185,402]],"Ñuble":[[136,429],[130,433],[129,437],[130,441],[130,443],[176,443],[176,441],[176,437],[176,433],[175,429]],"Biobío":[[130,444],[133,448],[134,452],[134,456],[134,460],[135,464],[136,468],[138,472],[138,475],[174,475],[174,472],[174,468],[176,464],[180,460],[181,456],[180,452],[178,448],[176,444]],"La Araucanía":[[138,476],[138,480],[138,484],[136,488],[135,492],[135,496],[134,500],[134,504],[134,504],[171,504],[171,504],[171,500],[171,496],[171,492],[172,488],[172,484],[172,480],[174,476]],"Los Ríos":[[134,505],[134,509],[133,513],[134,517],[136,521],[136,523],[171,523],[171,521],[171,517],[171,513],[171,509],[171,505]],"Los Lagos":[[136,524],[136,528],[136,532],[135,536],[134,540],[134,544],[134,548],[134,552],[134,556],[133,560],[135,564],[138,568],[138,568],[176,568],[176,568],[176,564],[176,560],[175,556],[172,552],[172,548],[172,544],[172,540],[172,536],[174,532],[172,528],[171,524]],"Aysén":[[138,569],[138,573],[138,577],[138,581],[136,585],[135,589],[134,593],[135,597],[135,601],[135,605],[135,609],[134,613],[131,617],[128,621],[128,625],[128,629],[125,633],[122,637],[122,641],[123,645],[123,649],[123,649],[182,649],[182,649],[182,645],[182,641],[182,637],[183,633],[186,629],[185,625],[184,621],[184,617],[184,613],[184,609],[187,605],[188,601],[188,597],[188,593],[188,589],[190,585],[184,581],[176,577],[176,573],[176,569]],"Magallanes":[[122.8,650],[122.2,654],[121.6,658],[121.0,662],[120.3,666],[119.7,670],[119.1,674],[118.4,678],[117.8,682],[117.2,686],[116.6,690],[115.9,694],[115.3,698],[114.7,702],[114.0,706],[113.4,710],[112.8,714],[112.2,718],[111.5,722],[110.9,726],[110.3,730],[109.6,734],[109.0,738],[108.4,742],[107.8,746],[107.1,750],[106.5,754],[106.0,757],[173.6,757],[173.8,754],[174.1,750],[174.4,746],[174.8,742],[175.1,738],[175.4,734],[175.7,730],[176.0,726],[176.3,722],[176.6,718],[176.9,714],[177.2,710],[177.6,706],[177.9,702],[178.2,698],[178.5,694],[178.8,690],[179.1,686],[179.4,682],[179.7,678],[180.1,674],[180.4,670],[180.7,666],[181.0,662],[181.3,658],[181.6,654],[181.9,650]]}};
+const SANTIAGO_SVG = {"viewW":960,"viewH":960,"comunas":{"La Reina":[[476.8,326.5],[486.8,326.5],[487.0,330.2],[566.2,332.0],[566.5,344.2],[566.8,341.0],[582.0,341.0],[591.0,346.8],[596.2,372.8],[595.0,407.2],[607.8,407.2],[614.5,410.2],[669.2,411.0],[684.5,416.8],[688.5,401.8],[782.0,406.5],[782.2,400.8],[777.0,390.8],[760.0,375.8],[760.0,363.8],[733.5,340.5],[714.8,336.5],[700.0,329.2],[668.2,331.8],[666.5,322.8],[624.0,328.5],[563.8,329.5],[551.5,316.0],[546.8,315.8],[546.8,311.8],[546.5,325.2],[515.0,324.2],[513.8,320.0],[513.5,322.2],[504.2,323.8],[479.0,322.2],[479.0,326.2]],"Maipú":[[267.2,443.5],[245.8,437.0],[244.8,432.2],[177.2,420.2],[184.5,441.0],[184.5,456.0],[136.0,487.8],[142.2,490.0],[142.0,505.2],[102.8,517.2],[99.0,532.0],[101.0,591.2],[93.0,616.8],[107.0,626.8],[107.0,641.8],[94.0,653.0],[98.0,656.8],[97.5,672.2],[113.2,671.5],[126.8,684.5],[126.8,699.5],[101.2,699.8],[100.0,692.2],[93.5,691.0],[94.2,675.2],[63.8,674.0],[59.8,664.8],[45.8,672.0],[57.8,691.5],[55.0,715.2],[70.2,715.8],[71.0,736.8],[74.2,725.5],[90.2,725.5],[91.8,743.8],[95.5,735.2],[95.5,708.8],[106.2,708.5],[107.0,701.5],[129.2,703.0],[134.5,698.5],[150.0,698.5],[175.2,703.8],[279.0,549.5],[267.5,540.2],[235.8,540.0],[235.8,525.0],[248.2,500.8],[248.8,468.2],[263.0,467.8]],"Quilicura":[[340.2,52.2],[329.2,51.0],[320.8,42.2],[300.2,41.8],[294.0,36.5],[280.0,36.8],[275.5,55.8],[231.0,67.8],[255.2,99.2],[255.2,106.5],[261.0,106.8],[261.2,122.2],[245.8,122.5],[245.5,114.5],[206.0,115.2],[205.8,120.8],[196.0,123.0],[188.0,144.8],[179.2,145.2],[176.8,165.5],[165.5,177.2],[150.5,177.2],[155.5,178.5],[155.8,182.2],[168.5,196.5],[179.2,204.5],[179.5,220.2],[181.0,216.2],[201.0,216.2],[201.5,222.0],[206.2,227.0],[225.5,227.0],[233.2,235.8],[234.8,233.8],[267.0,233.8],[274.8,228.2],[287.5,228.2],[302.2,209.2],[322.8,207.2],[325.0,202.5],[314.8,176.8],[314.8,161.8],[335.5,161.2],[327.5,139.2],[327.5,123.5],[341.0,99.2],[352.8,92.2],[349.0,85.8],[349.0,66.2],[341.8,66.0]],"Lo Barnechea":[[584.5,140.0],[618.0,143.5],[659.2,174.8],[690.0,173.5],[690.2,188.2],[719.5,173.5],[739.8,171.5],[752.0,163.8],[761.0,163.5],[767.0,157.5],[798.5,158.5],[798.5,174.0],[803.5,170.5],[803.8,161.2],[825.8,161.2],[829.0,170.8],[849.8,152.5],[850.5,148.0],[860.2,142.0],[861.0,130.2],[894.0,125.2],[901.0,120.0],[911.0,99.5],[836.5,53.5],[814.5,55.2],[807.0,47.2],[769.2,57.5],[753.2,57.5],[721.8,45.8],[700.0,32.8],[659.5,36.8],[657.8,42.5],[642.8,42.5],[635.0,39.2],[634.0,42.2],[618.2,45.2],[617.5,51.2],[622.8,59.2],[622.8,74.2],[603.0,84.5],[602.2,104.0],[590.8,110.5],[590.8,122.8],[583.8,129.0]],"San Bernardo":[[305.5,597.2],[294.5,637.8],[280.2,638.0],[266.8,661.2],[263.5,706.8],[253.8,716.5],[248.5,741.0],[253.8,747.2],[253.0,764.5],[259.0,768.8],[262.0,781.5],[268.5,782.2],[261.5,822.2],[280.8,824.5],[287.5,852.8],[293.8,854.8],[299.8,885.5],[299.8,901.2],[294.5,913.5],[318.0,926.5],[327.8,927.0],[354.8,919.0],[350.2,916.5],[350.5,901.2],[379.5,900.0],[380.8,904.8],[387.5,905.0],[390.0,918.5],[396.0,918.5],[397.2,901.8],[384.2,877.2],[385.8,861.2],[377.0,847.2],[377.0,831.8],[401.2,733.2],[375.2,731.0],[323.2,708.8],[323.0,693.0],[328.8,681.2],[387.5,681.2],[387.8,684.0],[408.8,681.2],[409.0,696.5],[414.0,672.8],[338.0,669.0],[337.8,653.8],[348.8,622.5],[364.2,622.2]],"Puente Alto":[[688.2,640.0],[666.2,640.8],[664.5,636.8],[648.0,638.2],[643.5,634.0],[610.8,633.2],[625.2,654.8],[625.0,670.2],[573.8,680.0],[573.2,691.5],[550.2,692.2],[538.5,687.0],[516.2,695.0],[518.5,729.8],[524.8,740.0],[525.5,778.0],[483.8,786.2],[478.8,865.5],[472.5,875.5],[491.8,873.8],[504.8,876.8],[534.2,870.0],[558.0,871.5],[569.2,859.5],[582.8,859.2],[591.0,840.2],[610.5,835.2],[615.0,825.0],[635.2,825.0],[649.0,816.5],[677.0,820.5],[685.5,812.2],[712.0,815.0],[716.2,809.0],[736.5,806.2],[741.2,787.2],[756.5,783.0],[759.0,764.2],[764.0,762.8],[764.8,753.0],[700.0,756.5],[694.5,762.0],[679.5,762.0],[673.2,758.8],[671.0,743.5],[662.0,732.2],[662.2,705.0],[667.2,704.8],[670.2,680.2],[688.8,681.2]],"San Joaquín":[[481.0,435.8],[445.0,452.2],[456.8,557.8],[477.0,556.5],[499.5,543.5],[511.0,543.5],[511.2,532.5],[523.8,532.5],[505.8,531.5],[503.2,519.5],[503.2,502.5],[504.5,502.2],[500.0,500.8],[498.2,489.2],[489.8,469.5],[488.5,463.2],[488.5,446.2],[498.8,444.8],[484.2,444.8]],"Cerrillos":[[266.0,442.5],[266.0,456.0],[263.8,468.2],[249.5,469.0],[249.2,501.2],[245.8,503.0],[231.0,539.5],[268.2,539.8],[273.5,544.2],[273.5,559.2],[261.2,577.5],[304.8,596.8],[305.5,574.0],[308.5,566.5],[308.5,561.2],[311.0,559.8],[348.2,459.5],[348.2,451.5],[337.5,452.5],[336.8,454.5],[302.8,463.2],[287.0,463.2],[277.5,454.0],[277.5,446.2],[270.0,446.2]],"Peñalolén":[[559.2,533.2],[624.5,539.2],[669.0,540.0],[682.5,531.5],[693.0,531.5],[696.2,526.0],[701.0,526.0],[720.8,508.5],[740.0,508.0],[746.8,502.0],[772.2,501.5],[792.2,506.5],[811.2,490.2],[826.8,490.2],[832.2,485.8],[847.5,485.8],[860.2,491.5],[872.2,491.2],[888.0,482.8],[899.5,482.8],[899.0,474.0],[895.5,466.5],[867.2,460.2],[855.8,446.2],[847.0,442.0],[822.2,440.8],[811.0,432.5],[810.2,426.2],[800.2,415.2],[782.2,407.2],[689.2,401.5],[686.0,412.5],[614.5,411.0],[595.0,402.8],[586.5,429.2],[578.0,482.2],[559.2,518.8]],"Ñuñoa":[[590.5,347.5],[572.2,335.8],[554.2,366.2],[537.0,366.0],[514.8,368.0],[506.0,372.8],[493.0,372.8],[466.2,381.2],[485.2,445.8],[519.5,441.2],[566.5,441.2],[585.2,429.8],[594.5,402.2],[597.0,381.8]],"Santiago":[[332.5,355.0],[332.5,367.8],[360.2,367.5],[360.2,382.8],[363.2,383.8],[363.2,418.5],[361.2,451.5],[358.8,451.8],[358.5,456.2],[379.2,457.0],[379.5,450.5],[445.0,451.5],[480.5,435.0],[454.2,342.0],[376.8,320.5],[376.0,321.8],[360.2,321.8],[357.0,326.5],[357.8,353.2]],"Las Condes":[[522.0,272.5],[516.0,290.0],[528.8,294.8],[567.0,329.0],[668.0,323.8],[669.0,332.8],[703.8,330.2],[733.8,339.8],[760.2,363.2],[760.2,375.0],[777.8,390.5],[782.8,406.8],[800.5,414.5],[812.0,432.5],[822.5,440.0],[847.0,441.0],[856.0,445.2],[867.2,459.2],[896.0,465.8],[906.5,452.5],[906.0,412.0],[919.0,400.2],[917.0,370.8],[910.5,357.8],[903.0,313.5],[884.0,311.0],[862.2,295.8],[860.8,247.5],[855.8,240.2],[827.2,234.8],[803.2,222.0],[803.2,212.0],[792.8,196.2],[792.8,181.0],[803.8,170.2],[803.8,158.8],[769.8,156.0],[740.8,171.5],[720.8,173.8],[686.8,190.0],[671.5,208.5]],"La Pintana":[[316.8,544.5],[307.8,569.5],[362.5,571.5],[362.5,587.2],[353.5,610.0],[337.8,610.5],[356.2,618.5],[356.5,603.0],[426.2,603.5],[420.8,635.0],[405.5,635.2],[418.8,637.5],[418.8,653.2],[387.2,794.0],[441.2,798.8],[442.8,844.5],[479.0,844.5],[483.0,785.8],[526.5,777.2],[524.0,740.0],[517.8,729.8],[510.5,656.2],[470.5,662.5],[468.2,646.2],[468.0,660.5],[421.0,656.5],[421.8,639.0],[467.2,639.0],[461.8,598.5],[461.5,613.0],[431.8,610.2],[440.0,559.0],[456.2,558.5],[454.5,542.5],[454.2,556.2],[436.8,555.8],[431.2,594.8],[401.2,594.8],[402.5,579.0],[398.8,577.2],[396.0,592.0],[367.0,591.8],[366.8,575.8],[375.2,554.5],[362.2,561.0],[317.5,559.5]],"La Florida":[[513.8,694.2],[530.0,689.2],[545.5,689.2],[553.8,693.0],[573.2,690.8],[573.8,679.2],[632.8,668.0],[620.0,648.2],[620.0,633.2],[643.8,633.2],[656.0,644.8],[673.2,628.2],[668.5,614.8],[669.8,582.5],[710.8,584.5],[710.0,568.0],[686.2,566.0],[686.2,539.8],[692.2,532.5],[682.5,532.5],[676.8,538.2],[670.0,540.5],[506.5,532.2],[511.8,540.2],[514.0,631.5],[505.5,632.5],[511.5,656.5],[510.5,673.2]],"Renca":[[375.5,319.2],[359.2,298.8],[356.0,265.8],[325.5,203.8],[302.5,210.0],[289.2,227.0],[277.8,227.0],[270.2,232.2],[229.8,232.8],[220.0,225.8],[204.2,226.0],[200.5,217.0],[188.2,212.0],[133.5,269.8],[133.2,299.5],[139.0,300.2],[142.5,308.2],[142.8,293.2],[164.2,294.0],[164.5,317.0],[149.8,317.2],[156.2,322.0],[200.2,329.5],[200.5,314.2],[244.5,314.2],[245.2,307.5],[237.5,305.8],[237.2,302.5],[234.8,305.8],[217.2,305.8],[217.0,303.0],[209.5,305.8],[172.8,305.8],[172.8,288.8],[271.2,287.5],[275.5,290.8],[275.5,303.8],[277.0,277.8],[284.5,273.5],[305.2,273.5],[335.0,299.0]],"Huechuraba":[[327.0,124.8],[327.0,135.5],[336.5,161.5],[348.5,163.2],[386.2,179.0],[447.0,208.0],[509.8,257.0],[510.0,240.8],[517.0,230.5],[525.2,223.5],[525.5,215.5],[516.5,206.5],[516.5,194.2],[511.0,193.5],[511.5,177.8],[500.5,176.8],[499.0,180.8],[487.8,183.5],[472.8,183.5],[465.2,180.8],[465.8,155.0],[459.0,146.8],[451.5,146.5],[442.5,152.0],[436.0,166.0],[416.2,166.0],[416.0,158.5],[413.5,158.0],[414.2,140.0],[411.5,135.8],[399.0,135.8],[398.8,129.5],[388.2,126.8],[389.5,108.0],[384.0,102.8],[384.0,98.2],[374.5,93.5],[373.2,96.2],[362.0,96.2],[362.0,101.8],[355.5,108.2],[348.8,108.2],[348.8,113.2],[344.0,118.0],[337.8,118.0],[334.8,124.8]],"Vitacura":[[708.5,178.8],[703.0,172.5],[657.5,174.5],[628.8,150.0],[618.2,144.5],[605.2,144.5],[598.0,141.2],[595.0,136.5],[582.0,136.5],[578.2,130.0],[568.2,124.8],[565.0,132.2],[560.8,135.0],[546.0,136.5],[528.0,156.2],[534.8,161.8],[534.5,182.5],[529.8,187.0],[529.5,194.0],[510.8,193.8],[511.8,177.8],[500.8,176.5],[499.0,180.5],[472.8,183.2],[485.8,188.8],[500.5,188.8],[503.5,192.8],[504.0,201.0],[510.8,206.5],[522.5,206.8],[523.5,225.8],[515.5,233.0],[509.8,245.5],[494.8,245.8],[506.5,254.5],[506.5,270.2],[502.2,273.0],[517.0,273.2],[515.2,290.2],[519.2,291.8],[521.2,271.5],[671.2,207.8],[686.5,189.2]],"Estación Central":[[359.5,367.2],[332.5,368.8],[332.2,377.5],[301.2,379.2],[302.0,403.0],[296.5,405.2],[280.0,405.2],[247.8,397.5],[248.2,431.5],[245.5,431.8],[245.8,436.0],[268.0,443.0],[289.8,465.8],[347.2,450.8],[375.0,451.0],[374.8,437.0],[362.2,436.5],[362.8,384.2],[359.5,383.2]],"Macul":[[585.5,430.5],[566.8,442.0],[522.0,441.8],[485.5,446.5],[490.2,469.0],[498.5,489.2],[506.0,531.5],[558.5,534.0],[558.5,518.8],[577.2,482.0]],"Pudahuel":[[123.2,151.5],[124.5,182.8],[97.2,185.0],[95.2,190.2],[100.8,295.8],[94.2,296.0],[95.0,315.2],[81.8,318.0],[81.5,323.2],[54.2,332.8],[54.2,343.8],[46.2,349.8],[42.5,391.8],[36.0,405.8],[42.8,421.8],[53.5,426.0],[60.2,421.8],[62.2,413.2],[104.0,417.5],[105.5,411.8],[120.8,411.8],[137.2,419.5],[149.2,411.0],[151.2,401.8],[170.5,401.5],[176.0,419.2],[233.5,431.2],[233.8,440.5],[247.8,431.0],[247.0,398.8],[228.8,392.8],[229.0,374.5],[224.5,373.2],[225.0,332.5],[205.0,332.5],[180.5,328.0],[168.2,319.8],[152.8,320.2],[138.8,301.0],[132.2,299.8],[132.8,268.8],[187.8,211.5],[170.2,198.5]],"San José de Maipo":[[926.5,707.0],[921.0,703.2],[902.5,703.5],[896.2,701.8],[891.2,696.2],[878.8,696.2],[876.2,693.0],[874.2,684.2],[871.5,683.2],[867.5,691.0],[867.0,697.2],[848.2,697.2],[844.8,693.2],[837.8,701.5],[837.8,711.0],[833.5,717.5],[825.5,718.0],[824.2,722.8],[787.0,725.2],[783.8,726.8],[779.5,734.2],[776.5,753.0],[744.5,754.0],[758.2,754.2],[758.2,778.0],[766.0,769.8],[777.0,762.8],[777.5,758.8],[781.0,758.8],[782.8,756.2],[799.2,756.5],[802.2,755.0],[805.0,749.5],[817.0,749.5],[823.0,745.8],[841.8,744.8],[844.0,741.2],[844.0,724.5],[855.5,723.8],[858.5,722.0],[858.8,718.8],[861.8,718.8],[864.8,715.5],[886.5,714.5],[906.8,709.5],[921.8,709.5],[926.0,712.0]],"Pirque":[[717.0,818.2],[715.0,814.2],[703.0,814.2],[691.0,809.2],[681.2,817.8],[650.2,816.5],[640.2,823.8],[619.2,822.8],[613.5,827.8],[611.0,836.0],[597.5,837.0],[591.2,841.0],[584.5,858.0],[572.2,858.2],[564.0,867.5],[549.2,867.5],[543.0,870.5],[511.8,876.2],[478.5,873.8],[469.5,879.0],[467.8,887.2],[472.5,895.0],[482.8,899.2],[482.8,914.5],[486.8,919.2],[494.5,919.2],[501.8,915.2],[523.0,914.8],[535.0,910.2],[543.5,900.8],[570.5,893.0],[579.0,886.0],[584.5,886.0],[598.8,880.5],[607.5,880.5],[624.0,873.5],[624.2,851.0],[661.5,849.8],[661.8,855.5],[668.8,848.5],[689.5,844.5],[684.8,840.0],[685.0,824.8],[702.2,819.0]],"Lo Espejo":[[356.0,451.5],[332.8,455.2],[344.8,455.5],[344.8,471.5],[333.2,501.5],[348.0,501.8],[348.0,519.0],[332.0,519.2],[331.8,505.5],[328.2,514.8],[309.2,514.8],[301.2,512.0],[302.8,519.2],[321.0,518.0],[321.0,535.0],[312.0,557.2],[310.5,568.0],[306.2,574.2],[305.2,590.5],[290.8,590.8],[350.5,616.0],[382.8,534.8],[367.8,534.5],[356.0,529.5],[355.8,514.0],[385.0,513.8],[385.2,528.2],[402.5,483.8],[388.5,483.8],[388.2,474.2],[385.0,471.8],[376.0,471.5],[376.0,457.2],[358.2,457.0]],"San Ramón":[[367.0,576.2],[356.5,602.8],[426.0,603.5],[426.0,618.5],[422.5,635.2],[407.5,635.5],[419.0,637.5],[418.2,656.0],[470.2,662.2],[454.5,542.8],[454.2,556.0],[435.8,555.0],[437.0,571.2],[431.5,594.8],[403.0,594.8],[402.8,580.2],[400.8,577.2],[397.2,577.8],[395.8,584.2],[391.0,584.2],[390.8,591.0],[367.2,591.0]],"Recoleta":[[406.5,189.5],[405.8,194.2],[404.2,194.8],[404.2,200.8],[405.5,201.2],[405.8,248.2],[403.2,249.5],[406.0,252.5],[406.0,262.5],[411.2,266.2],[416.5,266.5],[416.2,295.2],[422.2,295.8],[420.2,331.8],[454.2,341.2],[454.5,327.2],[459.2,318.5],[461.0,306.5],[470.0,299.8],[476.2,299.8],[490.5,285.0],[493.5,277.8],[508.8,268.0],[509.5,258.0],[447.2,209.0]],"El Bosque":[[351.0,617.0],[336.2,659.0],[328.8,659.2],[328.8,682.0],[317.0,705.8],[375.2,730.8],[400.5,735.8],[421.0,639.0],[391.2,633.8]],"Conchalí":[[311.5,162.2],[311.0,166.8],[320.5,189.2],[320.5,204.2],[317.8,205.5],[317.5,207.2],[311.5,208.0],[327.5,208.2],[333.8,224.5],[353.5,260.2],[355.0,260.5],[356.8,271.8],[356.8,257.5],[381.0,249.0],[404.5,249.0],[405.0,251.2],[405.2,196.2],[420.2,196.0],[415.2,196.0],[415.0,193.5],[410.0,193.5],[409.8,191.0],[406.0,191.0],[405.5,189.0],[348.5,164.0],[335.2,162.0],[335.0,159.8],[333.5,159.5],[333.5,155.5],[330.8,155.2],[330.8,147.8],[330.5,161.5]],"Cerro Navia":[[277.2,292.8],[266.8,284.8],[262.0,284.8],[257.5,287.8],[176.0,288.0],[169.8,291.2],[132.8,291.0],[132.5,299.2],[139.2,300.2],[140.0,304.2],[149.5,317.0],[156.5,322.0],[165.0,324.0],[172.2,324.0],[181.5,327.5],[197.0,328.0],[205.5,331.8],[225.2,332.2],[225.5,347.8],[251.8,347.5],[266.0,354.0]],"La Granja":[[511.0,544.2],[499.5,544.2],[477.2,557.2],[457.0,558.5],[471.0,662.5],[479.0,663.5],[510.2,655.5],[508.2,647.2],[508.2,631.2],[513.8,631.0]],"Independencia":[[353.8,259.2],[357.0,266.5],[360.0,298.5],[367.2,306.2],[367.2,321.2],[360.0,321.8],[358.2,323.0],[358.2,324.5],[373.8,325.0],[374.0,323.8],[390.2,323.8],[420.8,332.5],[420.8,316.8],[422.5,296.5],[415.8,296.0],[415.8,267.0],[411.0,267.0],[405.8,263.0],[405.8,253.2],[402.5,249.8],[383.2,249.2],[370.5,252.2]],"Quinta Normal":[[267.2,280.5],[267.2,284.2],[275.8,290.8],[275.8,306.5],[268.0,348.0],[300.0,351.2],[301.2,378.5],[331.8,376.8],[332.0,354.2],[358.0,352.8],[357.0,324.2],[376.0,324.8],[375.2,320.0],[347.0,307.5],[332.5,298.2],[321.0,286.2],[305.0,274.2],[284.8,274.2],[273.5,280.5]],"Providencia":[[521.5,272.2],[503.5,272.2],[493.8,278.5],[491.2,285.2],[476.5,300.5],[470.2,300.5],[461.8,306.8],[460.0,318.5],[453.5,331.0],[455.0,331.2],[455.0,342.0],[470.0,395.0],[470.0,380.0],[477.8,376.8],[499.0,375.5],[512.5,368.2],[525.5,366.8],[540.5,366.8],[550.0,373.2],[568.5,342.0],[582.2,342.0],[572.0,336.2],[566.0,329.0],[528.5,295.5],[519.8,292.2],[519.8,276.8]],"Pedro Aguirre Cerda":[[358.8,291.5],[358.5,304.5],[342.2,304.5],[332.2,297.8],[332.0,312.2],[293.8,312.8],[289.2,348.8],[270.5,348.5],[270.2,333.8],[267.5,348.5],[252.2,348.5],[266.0,354.8],[267.5,350.0],[299.5,351.8],[299.8,374.2],[284.0,374.2],[283.8,370.5],[282.2,374.0],[254.2,371.2],[253.8,374.2],[235.2,374.2],[234.8,371.2],[225.5,371.2],[225.5,348.5],[249.5,347.8],[225.8,347.8],[225.0,336.5],[225.0,373.0],[229.0,374.5],[229.0,392.5],[247.2,397.0],[247.8,431.2],[228.2,430.5],[233.2,432.0],[234.0,440.5],[251.2,438.0],[248.2,437.0],[248.2,401.0],[283.8,406.0],[283.8,411.2],[287.5,411.5],[285.2,438.8],[334.5,438.8],[334.5,415.5],[338.0,413.8],[328.2,412.8],[328.0,409.2],[302.8,412.5],[302.0,379.2],[331.8,377.2],[332.2,368.5],[358.2,367.2],[357.2,324.2],[376.2,324.8],[375.5,316.0],[359.2,301.0]],"Lo Prado":[[225.5,348.8],[225.2,373.0],[229.5,374.0],[229.5,392.2],[247.5,396.8],[248.0,415.2],[248.2,400.2],[263.2,400.2],[284.0,406.0],[290.5,406.0],[290.8,427.8],[287.5,428.0],[287.0,433.0],[289.8,433.2],[289.8,438.8],[298.5,438.8],[302.2,437.0],[326.8,437.0],[326.8,435.2],[324.5,435.0],[324.5,417.2],[328.2,417.0],[328.5,415.5],[337.0,415.5],[328.5,415.5],[328.2,413.2],[302.8,413.0],[301.5,379.0],[308.0,378.8],[300.5,378.5],[299.5,352.0],[250.5,347.8]],"Padre Hurtado":[[59.2,664.8],[45.8,672.2],[45.8,676.8],[57.5,692.0],[57.5,707.2],[55.0,711.5],[53.0,711.8],[33.2,731.8],[39.5,734.8],[53.0,718.0],[53.5,715.5],[69.2,715.5],[69.5,739.2],[58.5,746.8],[72.2,761.5],[84.5,759.8],[96.0,734.0],[96.2,708.8],[106.0,708.5],[111.0,703.5],[127.2,704.2],[138.2,696.8],[105.5,665.0],[94.0,675.8],[78.8,675.8],[77.0,674.2],[65.2,674.2]],"La Cisterna":[[381.2,540.2],[373.2,560.5],[373.0,563.5],[371.8,564.2],[370.5,569.5],[369.5,570.0],[351.2,616.2],[391.8,633.0],[420.5,637.5],[420.5,632.8],[422.5,632.5],[440.0,556.8]],"San Miguel":[[415.5,451.8],[381.5,539.5],[446.8,558.0],[456.0,557.8],[444.2,452.5]]}};
+
+
+const SECTOR_INFO = {
+  "Izquierda": {cls:"izq", color:"var(--izq)"},
+  "Centro": {cls:"centro", color:"var(--centro)"},
+  "Derecha": {cls:"derecha", color:"var(--derecha)"},
+  "Independiente": {cls:"indep", color:"var(--indep)"},
+  "Multipartidista": {cls:"multi", color:"var(--multi)"},
+  "Sin clasificar": {cls:"multi", color:"var(--indep)"}
+};
+const ESTADO_INFO = {
+  "condenado": {cls:"st-condenado", label:"Condenado"},
+  "formalizado": {cls:"st-formalizado", label:"Formalizado / imputado"},
+  "investigacion": {cls:"st-investigacion", label:"Investigación abierta"},
+  "cerrado_sin_condena": {cls:"st-cerrado", label:"Cerrado sin condena"}
+};
+
+let YEAR_MIN, YEAR_MAX, state; // se calculan en initApp(), una vez cargado casos.json
+
+function fmtCLP(n){
+  if(n===null || n===undefined) return "s/i";
+  return "$" + Math.round(n).toLocaleString('es-CL') + " M";
+}
+
+/* =======================================================================
+   BUILD FILTER UI
+   ======================================================================= */
+function buildSectorChips(){
+  const el = document.getElementById('sector-chips');
+  Object.keys(SECTOR_INFO).forEach(sec=>{
+    const id = 'chk-sector-'+sec.replace(/\s+/g,'');
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    label.innerHTML = `<input type="checkbox" id="${id}" checked>
+      <span class="check-dot" style="background:${SECTOR_INFO[sec].color}"></span>
+      <span>${sec}</span>`;
+    label.querySelector('input').addEventListener('change', e=>{
+      if(e.target.checked){ state.sectores.add(sec); } else { state.sectores.delete(sec); }
+      render();
+    });
+    el.appendChild(label);
+  });
+}
+
+function buildEstadoChips(){
+  const el = document.getElementById('estado-chips');
+  Object.keys(ESTADO_INFO).forEach(key=>{
+    const id = 'chk-estado-'+key;
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    label.innerHTML = `<input type="checkbox" id="${id}" checked>
+      <span>${ESTADO_INFO[key].label}</span>`;
+    label.querySelector('input').addEventListener('change', e=>{
+      if(e.target.checked){ state.estados.add(key); } else { state.estados.delete(key); }
+      render();
+    });
+    el.appendChild(label);
+  });
+}
+
+function buildNivelChips(){
+  const el = document.getElementById('nivel-chips');
+  ["Nacional","Regional","Municipal"].forEach(niv=>{
+    const id = 'chk-nivel-'+niv;
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    label.innerHTML = `<input type="checkbox" id="${id}" checked>
+      <span>${niv}</span>`;
+    label.querySelector('input').addEventListener('change', e=>{
+      if(e.target.checked){ state.niveles.add(niv); } else { state.niveles.delete(niv); }
+      render();
+    });
+    el.appendChild(label);
+  });
+}
+
+function buildPartidoSelect(){
+  const el = document.getElementById('partido-checks');
+  const partidos = [...new Set(CASES.map(c=>c.partido))].sort((a,b)=>a.localeCompare(b,'es'));
+  state.partidos = new Set(partidos);
+  partidos.forEach(p=>{
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    label.innerHTML = `<input type="checkbox" checked><span>${p}</span>`;
+    label.querySelector('input').addEventListener('change', e=>{
+      if(e.target.checked){ state.partidos.add(p); } else { state.partidos.delete(p); }
+      render();
+    });
+    el.appendChild(label);
+  });
+  document.getElementById('partido-todos').addEventListener('click', ()=>{
+    state.partidos = new Set(partidos);
+    el.querySelectorAll('input[type=checkbox]').forEach(i=>i.checked=true);
+    render();
+  });
+  document.getElementById('partido-ninguno').addEventListener('click', ()=>{
+    state.partidos = new Set();
+    el.querySelectorAll('input[type=checkbox]').forEach(i=>i.checked=false);
+    render();
+  });
+}
+
+function buildYearRange(){
+  const minInput = document.getElementById('year-min');
+  const maxInput = document.getElementById('year-max');
+  [minInput,maxInput].forEach(inp=>{
+    inp.min = YEAR_MIN; inp.max = YEAR_MAX; inp.step=1;
+  });
+  minInput.value = YEAR_MIN; maxInput.value = YEAR_MAX;
+
+  function update(){
+    let lo = parseInt(minInput.value), hi = parseInt(maxInput.value);
+    if(lo > hi - 1){ 
+      if(this === minInput){ lo = hi - 1; minInput.value = lo; }
+      else { hi = lo + 1; maxInput.value = hi; }
+    }
+    state.yearMin = lo; state.yearMax = hi;
+    document.getElementById('year-min-label').textContent = lo;
+    document.getElementById('year-max-label').textContent = hi;
+    const pctLo = (lo-YEAR_MIN)/(YEAR_MAX-YEAR_MIN)*100;
+    const pctHi = (hi-YEAR_MIN)/(YEAR_MAX-YEAR_MIN)*100;
+    const fill = document.getElementById('range-fill');
+    fill.style.left = pctLo + '%';
+    fill.style.width = (pctHi-pctLo) + '%';
+    render();
+  }
+  minInput.addEventListener('input', update);
+  maxInput.addEventListener('input', update);
+  update();
+}
+
+function buildSearch(){
+  const el = document.getElementById('search-input');
+  let t;
+  el.addEventListener('input', ()=>{
+    clearTimeout(t);
+    t = setTimeout(()=>{ state.search = el.value.trim().toLowerCase(); render(); }, 150);
+  });
+}
+
+function buildReset(){
+  document.getElementById('reset-btn').addEventListener('click', ()=>{
+    state.search=""; document.getElementById('search-input').value="";
+    state.sectores = new Set(Object.keys(SECTOR_INFO));
+    document.querySelectorAll('#sector-chips input[type=checkbox]').forEach(i=>i.checked=true);
+    state.estados = new Set(Object.keys(ESTADO_INFO));
+    document.querySelectorAll('#estado-chips input[type=checkbox]').forEach(i=>i.checked=true);
+    state.niveles = new Set(["Nacional","Regional","Municipal"]);
+    document.querySelectorAll('#nivel-chips input[type=checkbox]').forEach(i=>i.checked=true);
+    state.partidos = new Set([...new Set(CASES.map(c=>c.partido))]);
+    document.querySelectorAll('#partido-checks input[type=checkbox]').forEach(i=>i.checked=true);
+    state.selectedComuna = null;
+    state.selectedRegion = null;
+    state.mapLevel = "pais";
+    document.getElementById('year-min').value = YEAR_MIN;
+    document.getElementById('year-max').value = YEAR_MAX;
+    document.getElementById('year-min').dispatchEvent(new Event('input'));
+    render();
+  });
+}
+
+function buildBarTabs(){
+  document.querySelectorAll('#bar-tabs .tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#bar-tabs .tab-btn').forEach(b=>b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      state.barMode = btn.dataset.mode;
+      render();
+    });
+  });
+}
+
+function buildViewTabs(){
+  document.querySelectorAll('.view-tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.view-tab-btn').forEach(b=>b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      state.activeView = btn.dataset.view;
+      document.getElementById('view-timeline').style.display = state.activeView==='timeline' ? '' : 'none';
+      document.getElementById('view-mapa').style.display = state.activeView==='mapa' ? '' : 'none';
+      document.getElementById('view-nodinero').style.display = state.activeView==='nodinero' ? '' : 'none';
+    });
+  });
+}
+function goToView(view){
+  const btn = document.querySelector(`.view-tab-btn[data-view="${view}"]`);
+  if(btn) btn.click();
+}
+
+/* =======================================================================
+   FILTERING
+   ======================================================================= */
+function getFiltered(){
+  return CASES.filter(c=>{
+    if(!state.sectores.has(c.sector)) return false;
+    if(!state.partidos.has(c.partido)) return false;
+    if(!state.estados.has(c.estadoCategoria)) return false;
+    if(!state.niveles.has(c.nivel)) return false;
+    if(c.anioInicio < state.yearMin || c.anioInicio > state.yearMax) return false;
+    if(state.search){
+      const hay = (c.titulo+" "+c.personas+" "+c.partido+" "+(c.comuna||"")+" "+c.descripcion).toLowerCase();
+      if(!hay.includes(state.search)) return false;
+    }
+    return true;
+  });
+}
+
+/* =======================================================================
+   RENDER: KPIs
+   ======================================================================= */
+function renderKPIs(filtered){
+  const total = filtered.length;
+  const condenados = filtered.filter(c=>c.estadoCategoria==="condenado").length;
+  const abiertos = filtered.filter(c=>c.estadoCategoria==="formalizado"||c.estadoCategoria==="investigacion").length;
+  const economicos = filtered.filter(c=>(c.categoria||"economico")==="economico");
+  const noEconomicos = filtered.filter(c=>(c.categoria||"economico")==="no_economico").length;
+  const monto = economicos.reduce((s,c)=> s + (c.monto||0), 0);
+
+  document.getElementById('kpi-strip').innerHTML = `
+    <div class="kpi"><div class="val">${total}</div><div class="lbl">Casos en el expediente</div></div>
+    <div class="kpi"><div class="val">${condenados}</div><div class="lbl">Con condena firme</div></div>
+    <div class="kpi"><div class="val">${abiertos}</div><div class="lbl">En investigación o formalizados</div></div>
+    <div class="kpi">${fmtCLP(monto)}<div class="lbl" style="margin-top:4px;">Millones de pesos (casos económicos)</div></div>
+    <div class="kpi" id="kpi-nodinero" style="cursor:pointer;" title="Ver casos sin dinero involucrado"><div class="val">${noEconomicos}</div><div class="lbl">Casos sin dinero involucrado →</div></div>
+  `;
+  document.getElementById('hero-total-monto').textContent = fmtCLP(monto).replace('$','');
+  document.getElementById('filter-count').textContent = total + ' de ' + CASES.length + ' casos coinciden con el filtro actual';
+  document.getElementById('kpi-nodinero').addEventListener('click', ()=> goToView('nodinero'));
+}
+
+/* =======================================================================
+   RENDER: DONUT (sector %, only Izquierda/Centro/Derecha)
+   ======================================================================= */
+function renderDonut(filtered){
+  const base = filtered.filter(c=> (c.categoria||"economico")==="economico" && (c.sector==="Izquierda" || c.sector==="Centro" || c.sector==="Derecha"));
+  const counts = {Izquierda:0, Centro:0, Derecha:0};
+  base.forEach(c=> counts[c.sector]++);
+  const total = base.length || 1;
+
+  const order = ["Derecha","Izquierda","Centro"];
+  let acc = 0;
+  const stops = [];
+  order.forEach(sec=>{
+    const pct = counts[sec]/total*100;
+    stops.push(`${SECTOR_INFO[sec].color} ${acc}% ${acc+pct}%`);
+    acc += pct;
+  });
+  const donut = document.getElementById('donut');
+  if(base.length===0){
+    donut.style.background = 'var(--line)';
+  } else {
+    donut.style.background = `conic-gradient(${stops.join(',')})`;
+  }
+  donut.innerHTML = `<div class="donut-hole"><div class="n">${base.length}</div><div class="t">casos<br>clasificados</div></div>`;
+
+  const legend = document.getElementById('donut-legend');
+  legend.innerHTML = order.map(sec=>{
+    const pct = base.length ? Math.round(counts[sec]/total*100) : 0;
+    return `<div class="legend-item">
+      <span class="legend-dot" style="background:${SECTOR_INFO[sec].color}"></span>
+      <span>${sec}</span>
+      <span class="pct">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+/* =======================================================================
+   RENDER: BAR LIST (money by partido or sector)
+   ======================================================================= */
+function renderBarlist(filtered){
+  let groups = {};
+  if(state.barMode === "partido"){
+    filtered.forEach(c=>{
+      if(!c.monto) return;
+      groups[c.partido] = (groups[c.partido]||0) + c.monto;
+    });
+  } else {
+    filtered.forEach(c=>{
+      if(!c.monto) return;
+      groups[c.sector] = (groups[c.sector]||0) + c.monto;
+    });
+  }
+  const entries = Object.entries(groups).sort((a,b)=>b[1]-a[1]).slice(0, state.barMode==="partido"?10:6);
+  const max = entries.length ? entries[0][1] : 1;
+  const el = document.getElementById('barlist');
+
+  if(entries.length===0){
+    el.innerHTML = '<div class="legend-note">No hay montos que mostrar con los filtros actuales.</div>';
+    return;
+  }
+
+  el.innerHTML = entries.map(([name,val])=>{
+    let color = 'var(--ink)';
+    if(state.barMode==="sector" && SECTOR_INFO[name]) color = SECTOR_INFO[name].color;
+    const w = (val/max*100).toFixed(1);
+    return `<div class="barlist-row">
+      <div class="barlist-head"><span>${name}</span><span class="amt">${fmtCLP(val)}</span></div>
+      <div class="barlist-track"><div class="barlist-fill" style="width:${w}%; background:${color};"></div></div>
+    </div>`;
+  }).join('');
+}
+
+/* =======================================================================
+   RENDER: TIMELINE
+   ======================================================================= */
+function buildTimelineCard(c){
+  const sec = SECTOR_INFO[c.sector];
+  const est = ESTADO_INFO[c.estadoCategoria];
+  const noEcon = (c.categoria||"economico")==="no_economico";
+  return `
+  <article class="case-card">
+    <div class="case-dot-col"><div class="case-dot" style="background:${sec.color}"></div></div>
+    <div>
+      <div class="case-top">
+        <span class="tag sector-${sec.cls}">${c.sector} · ${c.partido}</span>
+        <span class="tag nivel">${c.nivel}${c.comuna? ' · '+c.comuna : ''}</span>
+        ${noEcon ? '<span class="tag nivel" style="color:var(--indep); border-color:var(--indep);">'+(c.delito||'Sin dinero involucrado')+'</span>' : ''}
+        <span class="stamp-badge ${est.cls}">${est.label}</span>
+      </div>
+      <h3>${c.titulo}</h3>
+      <div class="case-people">${c.personas}</div>
+      <div class="case-desc">${c.descripcion}</div>
+      <div class="case-foot">
+        ${noEcon ? `<span class="case-amount">${c.anioFin && c.anioFin!==c.anioInicio ? c.anioInicio+'–'+c.anioFin : c.anioInicio}</span>` : `<span class="case-amount">${fmtCLP(c.monto)}${c.anioFin && c.anioFin!==c.anioInicio ? ' · '+c.anioInicio+'–'+c.anioFin : ' · '+c.anioInicio}</span>`}
+        <span class="estado-detail">${c.estado}</span>
+        <a href="${c.fuente}" target="_blank" rel="noopener">Fuente: ${c.fuenteLabel}</a>
+      </div>
+      ${c.montoNota ? `<div class="case-amount-note">${c.montoNota}</div>` : ''}
+    </div>
+  </article>`;
+}
+
+function groupByYearHtml(sorted){
+  const byYear = {};
+  sorted.forEach(c=>{ (byYear[c.anioInicio] = byYear[c.anioInicio]||[]).push(c); });
+  return Object.keys(byYear).sort((a,b)=>b-a).map(year=>{
+    const cards = byYear[year].map(buildTimelineCard).join('');
+    return `<div class="year-group"><div class="year-head">${year}</div>${cards}</div>`;
+  }).join('');
+}
+
+function renderTimeline(filteredAll){
+  const filtered = filteredAll.filter(c=>(c.categoria||"economico")==="economico");
+  const el = document.getElementById('timeline');
+  document.getElementById('timeline-meta').textContent = filtered.length + ' resultado' + (filtered.length===1?'':'s');
+
+  if(filtered.length===0){
+    el.innerHTML = `<div class="empty-state"><div class="big">Sin resultados</div>No hay casos que coincidan con esta combinación de filtros. Prueba ampliando el rango de años o el sector político.</div>`;
+    return;
+  }
+  const sorted = [...filtered].sort((a,b)=> b.anioInicio - a.anioInicio || a.titulo.localeCompare(b.titulo,'es'));
+  el.innerHTML = groupByYearHtml(sorted);
+}
+
+function renderNoDineroChart(filtered){
+  const pieEl = document.getElementById('nodinero-pie');
+  const legendEl = document.getElementById('nodinero-pie-legend');
+  if(!pieEl || !legendEl) return;
+
+  const counts = {};
+  filtered.forEach(c=>{ counts[c.sector] = (counts[c.sector]||0)+1; });
+  const sectors = Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
+  const total = filtered.length;
+
+  if(total===0){
+    pieEl.style.background = 'var(--line)';
+    legendEl.innerHTML = '<div class="legend-note">Sin casos con los filtros actuales.</div>';
+    return;
+  }
+
+  let acc = 0;
+  const stops = [];
+  sectors.forEach(sec=>{
+    const pct = counts[sec]/total*100;
+    const color = (SECTOR_INFO[sec] && SECTOR_INFO[sec].color) || 'var(--ink-faint)';
+    stops.push(`${color} ${acc}% ${acc+pct}%`);
+    acc += pct;
+  });
+  pieEl.style.background = `conic-gradient(${stops.join(',')})`;
+
+  legendEl.innerHTML = sectors.map(sec=>{
+    const pct = Math.round(counts[sec]/total*100);
+    const color = (SECTOR_INFO[sec] && SECTOR_INFO[sec].color) || 'var(--ink-faint)';
+    return `<div class="legend-item">
+      <span class="legend-dot" style="background:${color}"></span>
+      <span>${sec}</span>
+      <span class="pct">${counts[sec]} · ${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderNoDinero(filteredAll){
+  const filtered = filteredAll.filter(c=>(c.categoria||"economico")==="no_economico");
+  const el = document.getElementById('nodinero-timeline');
+  document.getElementById('nodinero-meta').textContent = filtered.length + ' caso' + (filtered.length===1?'':'s');
+
+  renderNoDineroChart(filtered);
+
+  if(filtered.length===0){
+    el.innerHTML = `<div class="empty-state"><div class="big">Sin resultados</div>No hay casos en esta categoría con los filtros actuales.</div>`;
+    return;
+  }
+  const sorted = [...filtered].sort((a,b)=> b.anioInicio - a.anioInicio || a.titulo.localeCompare(b.titulo,'es'));
+  el.innerHTML = groupByYearHtml(sorted);
+}
+
+/* =======================================================================
+   RENDER: MAP (SVG real, con drill-down a comunas de Santiago)
+   ======================================================================= */
+const RM_SIN_POLIGONO = ["Lampa","Melipilla","Buin"]; // comunas de la Región Metropolitana
+  // que quedan fuera del área cubierta por el mapa de detalle (zona rural/periférica)
+
+function polyCentroid(pts){
+  let x=0,y=0; pts.forEach(p=>{x+=p[0];y+=p[1];});
+  return [x/pts.length, y/pts.length];
+}
+function sectorFillFor(cases){
+  const sectors = [...new Set(cases.map(c=>c.sector))];
+  if(sectors.length===0) return null;
+  return sectors.length===1 && SECTOR_INFO[sectors[0]] ? SECTOR_INFO[sectors[0]].color : 'var(--ink-faint)';
+}
+
+function renderMap(filtered){
+  const byComuna = {};
+  filtered.forEach(c=>{
+    const key = normalizeComuna(c.comuna);
+    if(!key || !COMUNA_REGION[key]) return;
+    (byComuna[key] = byComuna[key] || []).push(c);
+  });
+  const byRegion = {};
+  Object.keys(byComuna).forEach(k=>{
+    const r = COMUNA_REGION[k];
+    (byRegion[r] = byRegion[r] || []).push(...byComuna[k]);
+  });
+
+  const withCases = Object.keys(byComuna).length;
+  const excluded = filtered.length - Object.values(byComuna).reduce((s,arr)=>s+arr.length,0);
+  document.getElementById('mapa-meta').textContent = withCases + ' comunas/regiones con casos · ' + excluded + ' casos nacionales sin comuna no se muestran';
+
+  const strip = document.getElementById('mapa-strip');
+
+  if(state.mapLevel === 'metropolitana'){
+    const svgW = SANTIAGO_SVG.viewW, svgH = SANTIAGO_SVG.viewH;
+    const polys = Object.entries(SANTIAGO_SVG.comunas).map(([name, pts])=>{
+      const cases = byComuna[name] || [];
+      const fill = cases.length ? sectorFillFor(cases) : 'var(--paper)';
+      const active = state.selectedComuna===name ? 'active' : '';
+      const [cx,cy] = polyCentroid(pts);
+      const label = cases.length ? `<text x="${cx}" y="${cy}" class="map-poly-label">${cases.length}</text>` : '';
+      return `<g class="map-poly-g ${active}" data-comuna="${name}">
+        <polygon class="map-poly" points="${pts.map(p=>p.join(',')).join(' ')}" fill="${fill}"></polygon>
+        ${label}
+      </g>`;
+    }).join('');
+    strip.innerHTML = `
+      <button class="mapa-back" id="mapa-back-btn">← Volver al mapa de Chile</button>
+      <div class="mapa-svg-title">Región Metropolitana — comunas del Gran Santiago</div>
+      <svg viewBox="0 0 ${svgW} ${svgH}" class="mapa-svg">${polys}</svg>
+      ${RM_SIN_POLIGONO.some(n=>byComuna[n]) ? `<div class="mapa-outside">
+        <span>Comunas de la RM fuera del área urbana (sin polígono en este mapa):</span>
+        ${RM_SIN_POLIGONO.filter(n=>byComuna[n]).map(n=>{
+          const active = state.selectedComuna===n ? 'active' : '';
+          return `<button class="comuna-marker ${active}" data-comuna="${n}"><span class="dot" style="width:12px;height:12px;background:${sectorFillFor(byComuna[n])};"></span><span>${n} (${byComuna[n].length})</span></button>`;
+        }).join('')}
+      </div>` : ''}
+    `;
+    document.getElementById('mapa-back-btn').addEventListener('click', ()=>{
+      state.mapLevel = 'pais'; state.selectedComuna = null; state.selectedRegion = null; render();
+    });
+    strip.querySelectorAll('[data-comuna]').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const k = el.dataset.comuna;
+        state.selectedComuna = (state.selectedComuna===k) ? null : k;
+        render();
+      });
+    });
+  } else {
+    const svgW = CHILE_SVG.viewW, svgH = CHILE_SVG.viewH;
+    const polys = Object.entries(CHILE_SVG.regions).map(([name, pts])=>{
+      const cases = byRegion[name] || [];
+      const fill = cases.length ? sectorFillFor(cases) : 'var(--paper)';
+      const active = state.selectedRegion===name ? 'active' : '';
+      const isMetro = name === 'Metropolitana';
+      const [cx,cy] = polyCentroid(pts);
+      const label = cases.length ? `<text x="${cx}" y="${cy}" class="map-poly-label">${cases.length}</text>` : '';
+      return `<g class="map-poly-g ${active} ${isMetro?'metro':''}" data-region="${name}">
+        <polygon class="map-poly" points="${pts.map(p=>p.join(',')).join(' ')}" fill="${fill}"></polygon>
+        ${label}
+      </g>`;
+    }).join('');
+    strip.innerHTML = `
+      <div class="mapa-svg-title">Chile — 16 regiones · haz clic en Metropolitana para ver el detalle por comuna</div>
+      <svg viewBox="0 0 ${svgW} ${svgH}" class="mapa-svg mapa-svg-country">${polys}</svg>
+    `;
+    strip.querySelectorAll('[data-region]').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const r = el.dataset.region;
+        if(r === 'Metropolitana'){
+          state.mapLevel = 'metropolitana'; state.selectedRegion = null; state.selectedComuna = null;
+        } else {
+          state.selectedRegion = (state.selectedRegion===r) ? null : r;
+          state.selectedComuna = null;
+        }
+        render();
+      });
+    });
+  }
+
+  renderMapPanel(byComuna, byRegion);
+}
+
+function mapaCaseCard(c){
+  const est = ESTADO_INFO[c.estadoCategoria];
+  const noEcon = (c.categoria||"economico")==="no_economico";
+  return `<div class="mapa-case">
+    <h4>${c.titulo}</h4>
+    <p>${c.personas}</p>
+    <p><span class="stamp-badge ${est.cls}">${est.label}</span> &nbsp; ${noEcon ? 'Sin dinero involucrado' : fmtCLP(c.monto)} · ${c.anioInicio}</p>
+    <a href="${c.fuente}" target="_blank" rel="noopener">Fuente: ${c.fuenteLabel}</a>
+  </div>`;
+}
+
+function renderMapPanel(byComuna, byRegion){
+  const panel = document.getElementById('mapa-panel');
+
+  if(state.mapLevel === 'metropolitana'){
+    const k = state.selectedComuna;
+    if(!k || !byComuna[k]){
+      panel.innerHTML = '<div class="mapa-panel-empty">Selecciona una comuna del Gran Santiago para ver sus casos.</div>';
+      return;
+    }
+    const cases = [...byComuna[k]].sort((a,b)=>b.anioInicio-a.anioInicio);
+    panel.innerHTML = `
+      <button class="mapa-close" id="mapa-close-btn">← Ver todas las comunas</button>
+      <h3>${k}</h3>
+      <div class="panel-meta">${cases.length} caso${cases.length===1?'':'s'} en el expediente</div>
+      ${cases.map(mapaCaseCard).join('')}
+    `;
+    document.getElementById('mapa-close-btn').addEventListener('click', ()=>{ state.selectedComuna=null; render(); });
+    return;
+  }
+
+  const r = state.selectedRegion;
+  if(!r || !byRegion[r]){
+    panel.innerHTML = '<div class="mapa-panel-empty">Selecciona una región del mapa para ver sus casos (o haz clic en Metropolitana para el detalle por comuna).</div>';
+    return;
+  }
+  const grouped = {};
+  byRegion[r].forEach(c=>{
+    const k = normalizeComuna(c.comuna);
+    (grouped[k]=grouped[k]||[]).push(c);
+  });
+  panel.innerHTML = `
+    <button class="mapa-close" id="mapa-close-btn">← Ver todas las regiones</button>
+    <h3>${r}</h3>
+    <div class="panel-meta">${byRegion[r].length} caso${byRegion[r].length===1?'':'s'} en ${Object.keys(grouped).length} comuna${Object.keys(grouped).length===1?'':'s'}</div>
+    ${Object.keys(grouped).sort().map(k=>`
+      <div style="margin-bottom:6px;"><strong style="font-size:0.86rem;">${k}</strong></div>
+      ${grouped[k].sort((a,b)=>b.anioInicio-a.anioInicio).map(mapaCaseCard).join('')}
+    `).join('')}
+  `;
+  document.getElementById('mapa-close-btn').addEventListener('click', ()=>{ state.selectedRegion=null; render(); });
+}
+
+/* =======================================================================
+   MAIN RENDER
+   ======================================================================= */
+function render(){
+  const filtered = getFiltered();
+  renderKPIs(filtered);
+  renderDonut(filtered);
+  renderBarlist(filtered);
+  renderTimeline(filtered);
+  renderMap(filtered);
+  renderNoDinero(filtered);
+  document.getElementById('charts-meta').textContent = filtered.length + ' casos en el filtro actual';
+}
+
+/* =======================================================================
+   INIT
+   ======================================================================= */
+function initApp(){
+  const years = CASES.map(c=>c.anioInicio);
+  YEAR_MIN = Math.min(...years);
+  YEAR_MAX = 2026;
+  state = {
+    search:"",
+    sectores: new Set(Object.keys(SECTOR_INFO)),
+    partidos: new Set(),
+    estados: new Set(Object.keys(ESTADO_INFO)),
+    niveles: new Set(["Nacional","Regional","Municipal"]),
+    yearMin: YEAR_MIN,
+    yearMax: YEAR_MAX,
+    barMode: "partido",
+    activeView: "timeline",
+    selectedComuna: null,
+    selectedRegion: null,
+    mapLevel: "pais"
+  };
+
+  buildViewTabs();
+  buildSectorChips();
+  buildEstadoChips();
+  buildNivelChips();
+  buildPartidoSelect();
+  buildYearRange();
+  buildSearch();
+  buildReset();
+  buildBarTabs();
+  render();
+}
+
+/* Carga los casos desde casos.json (archivo externo, editable sin tocar este HTML).
+   IMPORTANTE: fetch() no funciona abriendo el archivo con doble clic (file://) por
+   restricciones de seguridad del navegador. Debe verse a través de un servidor
+   (GitHub Pages, Netlify, o "python3 -m http.server" en local). Ver README.md. */
+fetch('casos.json')
+  .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(data => { CASES = data; initApp(); })
+  .catch(err => {
+    console.error('No se pudo cargar casos.json:', err);
+    document.getElementById('kpi-strip').innerHTML =
+      '<div class="kpi" style="grid-column:1/-1;"><div class="lbl" style="color:var(--stamp);">'+
+      'No se pudo cargar casos.json. Si abriste este archivo con doble clic, los navegadores '+
+      'bloquean esa carga por seguridad — sírvelo con un servidor local o súbelo a un hosting real. '+
+      'Revisa el README.md incluido.</div></div>';
+  });
+</script>
+</body>
+</html>

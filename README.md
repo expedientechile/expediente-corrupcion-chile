@@ -1,0 +1,129 @@
+# Expediente Público — Corrupción política en Chile
+
+Guía para publicar esta página en internet y para que tú mismo puedas agregar casos nuevos más adelante, sin tocar código.
+
+## 1. Qué archivos tienes
+
+```
+expediente-corrupcion-chile/
+├── index.html     ← la página completa (diseño, filtros, gráficos, mapa). No la edites a mano.
+├── casos.json     ← la "base de datos": un array con todos los casos. ESTE es el archivo que vas a editar.
+└── README.md      ← este archivo
+```
+
+`index.html` carga `casos.json` automáticamente al abrirse (con `fetch('casos.json')`). Por eso **los dos archivos siempre tienen que estar juntos, en la misma carpeta**, tanto en tu computador como en el hosting. Si subes solo el HTML, la página va a cargar pero se va a ver vacía (sin casos).
+
+Los polígonos del mapa (regiones de Chile y comunas de Santiago) están adentro de `index.html`, no en el JSON, porque no son algo que necesites editar.
+
+## 2. Cómo agregar o editar un caso
+
+Abre `casos.json` con cualquier editor de texto (VS Code, Notepad++, Sublime, o incluso el Bloc de notas). Es una lista `[ ... ]` de objetos `{ ... }`, uno por caso, separados por comas. Para agregar uno nuevo, copia el siguiente bloque, pégalo como un elemento más de la lista (recuerda la coma antes del siguiente `{`) y completa los campos:
+
+```json
+{
+  "id": "identificador-unico-sin-espacios",
+  "titulo": "Nombre corto del caso",
+  "personas": "Nombre de la o las personas involucradas y su cargo",
+  "partido": "UDI",
+  "sector": "Derecha",
+  "nivel": "Municipal",
+  "comuna": "Providencia",
+  "anioInicio": 2026,
+  "anioFin": null,
+  "monto": 150,
+  "montoNota": "Explicación breve de a qué corresponde ese monto, o null si no aplica",
+  "categoria": "economico",
+  "delito": null,
+  "estadoCategoria": "investigacion",
+  "estado": "Texto corto que se muestra como 'sello' en la tarjeta, ej: Formalizado; en prisión preventiva",
+  "descripcion": "2 a 4 frases explicando el caso, en tono neutro, distinguiendo acusación de condena.",
+  "fuente": "https://enlace-a-la-noticia-o-fuente-oficial",
+  "fuenteLabel": "Nombre del medio (ej: La Tercera)"
+}
+```
+
+### Explicación de cada campo
+
+| Campo | Qué va ahí | Valores válidos |
+|---|---|---|
+| `id` | Identificador único interno. No se muestra. | Texto sin espacios ni tildes, ej: `"m-lasrosas-2026"`. No puede repetirse entre casos. |
+| `titulo` | Título de la tarjeta en la línea de tiempo. | Texto libre. |
+| `personas` | Quién está involucrado y su cargo/partido. | Texto libre. |
+| `partido` | Partido o etiqueta política tal como se muestra en la tarjeta. | Texto libre, ej: `"UDI"`, `"Independiente (afín a RN)"`. |
+| `sector` | Determina el color y en qué categoría del gráfico de torta/dona cae. | Exactamente uno de: `"Izquierda"`, `"Centro"`, `"Derecha"`, `"Independiente"`, `"Multipartidista"`, `"Sin clasificar"`. |
+| `nivel` | Nivel del caso. Afecta el filtro "Nivel". | `"Nacional"`, `"Regional"` o `"Municipal"`. |
+| `comuna` | Comuna o región asociada, para que aparezca en el mapa. | El nombre exacto de una comuna chilena, o `null` si es un caso nacional sin comuna (como Penta o SQM). **Para que aparezca como polígono clickeable en el mapa de Santiago, el nombre debe coincidir exactamente con una de las 37 comunas del Gran Santiago que trae el mapa** (ver lista al final). Otras comunas de Chile igual funcionan para el filtro y para agrupar por región, pero no van a tener un polígono propio dentro del detalle de Santiago. |
+| `anioInicio` | Año en que parte el caso. Ordena la línea de tiempo y se usa en el filtro de años. | Número, ej: `2024`. |
+| `anioFin` | Año en que termina/se resuelve, si ya se sabe. | Número o `null`. |
+| `monto` | Monto en **millones de pesos chilenos**. | Número (puede tener decimales), o `null` si no corresponde a un monto (por ejemplo, en casos de la categoría "sin dinero involucrado"). |
+| `montoNota` | Aclaración corta de qué compone ese monto. | Texto o `null`. |
+| `categoria` | Si el caso va en la pestaña normal o en "Sin dinero involucrado". | `"economico"` (o simplemente omite el campo) para casos de corrupción/dinero. `"no_economico"` para delitos sexuales, violencia intrafamiliar u otros sin plata de por medio. |
+| `delito` | Solo para casos `"no_economico"`: qué tipo de delito, se muestra como etiqueta. | Texto corto, ej: `"Delito sexual"`, `"Violencia intrafamiliar"`. `null` en casos económicos. |
+| `estadoCategoria` | Determina el color/categoría del "sello" y en qué grupo cae para los filtros de estado. | Exactamente uno de: `"investigacion"`, `"formalizado"`, `"condenado"`, `"cerrado_sin_condena"`. |
+| `estado` | Texto exacto que se muestra en el sello y en la tarjeta. | Texto libre, corto. |
+| `descripcion` | Resumen del caso. | Texto libre. Recuerda mantener presunción de inocencia: usa "formalizado por", "investigado por", no afirmes culpabilidad si no hay condena. |
+| `fuente` | Enlace a la noticia o fuente oficial. | URL completa, con `https://`. |
+| `fuenteLabel` | Nombre corto de esa fuente. | Texto, ej: `"El Mostrador"`, `"Cooperativa"`. |
+
+### Antes de subir un cambio: valida el JSON
+
+Un solo error de sintaxis (una coma de más, una comilla que falta) hace que **toda la página deje de cargar casos**. Antes de subir tu `casos.json` editado:
+
+1. Copia todo el contenido del archivo.
+2. Pégalo en un validador gratis como [jsonlint.com](https://jsonlint.com) o [jsonformatter.org](https://jsonformatter.org/json-validator).
+3. Si marca error, te dice en qué línea está. Corrígelo y vuelve a validar.
+4. Solo cuando diga "Valid JSON" (o similar), sube el archivo.
+
+Errores típicos: olvidar una coma entre dos casos, dejar una coma después del último campo de un caso (antes del `}`), o usar comillas normales `"` en vez de tipográficas si copiaste desde Word.
+
+## 3. Probarlo en tu computador antes de publicar
+
+Como el HTML carga `casos.json` con `fetch()`, **no puedes simplemente abrir `index.html` haciendo doble clic** — los navegadores bloquean esa carga por seguridad cuando el archivo se abre como `file://`. Vas a ver la página vacía o un aviso de error arriba.
+
+Para probarlo en tu computador, necesitas un pequeño servidor local (es más fácil de lo que suena):
+
+**Si tienes Python instalado** (Mac y Linux ya lo traen; en Windows se instala gratis desde python.org):
+1. Abre una terminal / símbolo del sistema.
+2. Entra a la carpeta con `cd ruta/a/expediente-corrupcion-chile`.
+3. Ejecuta: `python3 -m http.server 8000` (en Windows puede ser `python -m http.server 8000`).
+4. Abre tu navegador en `http://localhost:8000`.
+5. Para detener el servidor, `Ctrl+C` en la terminal.
+
+**Alternativa sin instalar nada**: la extensión "Live Server" de VS Code hace lo mismo con un clic derecho → "Open with Live Server".
+
+## 4. Publicarlo en internet (elige una opción)
+
+### Opción A — GitHub Pages (recomendada: gratis, permanente, sin límite de tráfico)
+
+1. Crea una cuenta gratis en [github.com](https://github.com) si no tienes una.
+2. Arriba a la derecha, clic en el **+** → **New repository**.
+3. Ponle un nombre (ej: `expediente-corrupcion-chile`), márcalo como **Public**, y crea el repositorio (no hace falta marcar ninguna otra opción).
+4. Dentro del repositorio recién creado, clic en **"Add file" → "Upload files"**.
+5. Arrastra los tres archivos (`index.html`, `casos.json`, y opcionalmente este `README.md`) y confirma con **"Commit changes"**.
+6. Ve a la pestaña **Settings** del repositorio → en el menú izquierdo, **Pages**.
+7. En "Branch", elige `main` y carpeta `/ (root)`, luego **Save**.
+8. Espera 1-2 minutos. GitHub te va a mostrar la URL pública, algo como `https://tu-usuario.github.io/expediente-corrupcion-chile/`.
+
+**Para agregar casos después**: entra al repositorio en github.com, abre `casos.json`, clic en el ícono de lápiz (editar), pega el JSON ya validado, y "Commit changes". El sitio se actualiza solo en 1-2 minutos, sin que tengas que volver a hacer nada más.
+
+### Opción B — Netlify Drop (más rápida para probar, sin cuenta obligatoria al inicio)
+
+1. Ve a [app.netlify.com/drop](https://app.netlify.com/drop).
+2. Arrastra la carpeta completa (`index.html` + `casos.json`) directo al navegador.
+3. En segundos te da una URL pública (algo como `random-name-123.netlify.app`).
+4. Para poder editarla después y que no expire, te pide crear una cuenta gratis y "reclamar" el sitio.
+
+### Opción C — Vercel, Cloudflare Pages, o cualquier hosting propio
+
+Cualquier hosting que sirva archivos estáticos (HTML/JSON/CSS/JS tal cual) funciona igual: sube ambos archivos a la misma carpeta y listo. No necesitas base de datos, PHP, ni backend — es un sitio 100% estático.
+
+## 5. Las 37 comunas con polígono propio en el mapa de Santiago
+
+Estas son las únicas comunas que van a aparecer como forma clickeable dentro del detalle "Metropolitana" del mapa (cualquier otra comuna de Chile funciona igual en los filtros y en la línea de tiempo, solo que no tiene polígono propio ahí dentro):
+
+La Reina, Maipú, Quilicura, Lo Barnechea, San Bernardo, Puente Alto, San Joaquín, Cerrillos, Peñalolén, Ñuñoa, Santiago, Las Condes, La Pintana, La Florida, Renca, Huechuraba, Vitacura, Estación Central, Macul, Pudahuel, San José de Maipo, Pirque, Lo Espejo, San Ramón, Recoleta, El Bosque, Conchalí, Cerro Navia, La Granja, Independencia, Quinta Normal, Providencia, Pedro Aguirre Cerda, Lo Prado, Padre Hurtado, La Cisterna, San Miguel.
+
+## 6. Ideas para más adelante (opcional)
+
+- Si el archivo `casos.json` crece mucho y se vuelve incómodo de editar a mano, puedes migrar a una hoja de Google Sheets y exportarla a JSON, o a una base de datos real (Airtable, Supabase). Mientras el formato final que le llega a `index.html` sea un array JSON con estos mismos campos, la página sigue funcionando igual.
+- Si quieres un dominio propio (en vez de `.github.io` o `.netlify.app`), tanto GitHub Pages como Netlify permiten conectar un dominio comprado en cualquier proveedor (NIC Chile, GoDaddy, etc.) desde su panel de configuración.
