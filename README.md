@@ -28,6 +28,7 @@ Abre `casos.json` con cualquier editor de texto (VS Code, Notepad++, Sublime, o 
   "sector": "Derecha",
   "nivel": "Municipal",
   "comuna": "Providencia",
+  "imagen": null,
   "anioInicio": 2026,
   "anioFin": null,
   "monto": 150,
@@ -49,10 +50,11 @@ Abre `casos.json` con cualquier editor de texto (VS Code, Notepad++, Sublime, o 
 | `id` | Identificador único interno. No se muestra. | Texto sin espacios ni tildes, ej: `"m-lasrosas-2026"`. No puede repetirse entre casos. |
 | `titulo` | Título de la tarjeta en la línea de tiempo. | Texto libre. |
 | `personas` | Quién está involucrado y su cargo/partido. | Texto libre. |
-| `partido` | Partido o etiqueta política tal como se muestra en la tarjeta. | Texto libre, ej: `"UDI"`, `"Independiente (afín a RN)"`. |
+| `partido` | Partido o etiqueta política tal como se muestra en la tarjeta. | Texto libre, ej: `"UDI"`, `"Independiente (afín a RN)"`. La página detecta automáticamente la sigla (UDI, RN, PS, PPD, DC, PC, Republicano, RD, PRI, Independiente) dentro de este texto para mostrar la insignia de color — no hace falta configurarla aparte. |
 | `sector` | Determina el color y en qué categoría del gráfico de torta/dona cae. | Exactamente uno de: `"Izquierda"`, `"Centro"`, `"Derecha"`, `"Independiente"`, `"Multipartidista"`, `"Sin clasificar"`. |
 | `nivel` | Nivel del caso. Afecta el filtro "Nivel". | `"Nacional"`, `"Regional"` o `"Municipal"`. |
 | `comuna` | Comuna o región asociada, para que aparezca en el mapa. | El nombre exacto de una comuna chilena, o `null` si es un caso nacional sin comuna (como Penta o SQM). **Para que aparezca como polígono clickeable en el mapa de Santiago, el nombre debe coincidir exactamente con una de las 37 comunas del Gran Santiago que trae el mapa** (ver lista al final). Otras comunas de Chile igual funcionan para el filtro y para agrupar por región, pero no van a tener un polígono propio dentro del detalle de Santiago. |
+| `imagen` | Foto de la persona principal del caso. | URL de una imagen (`"https://..."`), o `null` si no tienes una — en ese caso se muestra automáticamente una silueta genérica (como el avatar por defecto de Facebook), nunca un espacio roto. Si la URL deja de funcionar más adelante, también cae de vuelta a la silueta sola. Usa fotos con derechos claros para usar (por ejemplo Wikimedia Commons) — evita copiar la URL de una foto de portada de un diario, que casi siempre es protegida. |
 | `anioInicio` | Año en que parte el caso. Ordena la línea de tiempo y se usa en el filtro de años. | Número, ej: `2024`. |
 | `anioFin` | Año en que termina/se resuelve, si ya se sabe. | Número o `null`. |
 | `monto` | Monto en **millones de pesos chilenos**. | Número (puede tener decimales), o `null` si no corresponde a un monto (por ejemplo, en casos de la categoría "sin dinero involucrado"). |
@@ -64,6 +66,18 @@ Abre `casos.json` con cualquier editor de texto (VS Code, Notepad++, Sublime, o 
 | `descripcion` | Resumen del caso. | Texto libre. Recuerda mantener presunción de inocencia: usa "formalizado por", "investigado por", no afirmes culpabilidad si no hay condena. |
 | `fuente` | Enlace a la noticia o fuente oficial. | URL completa, con `https://`. |
 | `fuenteLabel` | Nombre corto de esa fuente. | Texto, ej: `"El Mostrador"`, `"Cooperativa"`. |
+
+### Sobre las insignias de partido (UDI, RN, PS…) y los logos oficiales
+
+La página muestra una insignia de color con las iniciales del partido junto a cada caso, generada automáticamente a partir del texto que pongas en `partido` — no es necesario configurar nada. No se usan los logos oficiales de los partidos porque son marcas registradas y no había forma de obtener archivos de imagen confiables para incrustar desde aquí.
+
+Si más adelante quieres reemplazar una insignia por el logo real, edita dentro de `index.html` el bloque `PARTY_BADGE` (búscalo con Ctrl+F) y completa el campo `logoUrl` del partido correspondiente con la URL de una imagen, por ejemplo:
+
+```js
+UDI: {label:"UDI", color:"#1b3a6b", logoUrl:"https://upload.wikimedia.org/.../Logo_UDI.png"},
+```
+
+Si esa URL deja de funcionar en el futuro, la página vuelve a mostrar la insignia de texto automáticamente — no se rompe el diseño.
 
 ### Antes de subir un cambio: valida el JSON
 
@@ -123,7 +137,13 @@ Estas son las únicas comunas que van a aparecer como forma clickeable dentro de
 
 La Reina, Maipú, Quilicura, Lo Barnechea, San Bernardo, Puente Alto, San Joaquín, Cerrillos, Peñalolén, Ñuñoa, Santiago, Las Condes, La Pintana, La Florida, Renca, Huechuraba, Vitacura, Estación Central, Macul, Pudahuel, San José de Maipo, Pirque, Lo Espejo, San Ramón, Recoleta, El Bosque, Conchalí, Cerro Navia, La Granja, Independencia, Quinta Normal, Providencia, Pedro Aguirre Cerda, Lo Prado, Padre Hurtado, La Cisterna, San Miguel.
 
-## 6. Ideas para más adelante (opcional)
+## 6. Equivalencias de montos
+
+En la barra de filtros, a la izquierda, hay un filtro **"Ver montos como"** con siete opciones: Pesos (CLP), 🏥 Hospital, 🩺 CESFAM, 🏫 Escuela, 🚒 Carro de bomberos, ⚽ Cancha y 👵 Pensión (PGU). Al elegir una, **todos** los montos del sitio (la cifra principal arriba, la ficha de casos económicos, la línea de tiempo, el detalle del mapa y el gráfico de montos acumulados) cambian de "$X millones" al número de esa unidad equivalente, con su ícono — por ejemplo, si eliges Hospital, un caso de $150.000 millones se muestra como "5,2 🏥".
+
+Las cifras de referencia que usa están adentro de `index.html`, en el bloque `EQUIVALENCIAS` (búscalo con Ctrl+F) — cada una tiene su fuente real, no son promedios inventados. Si quieres actualizar algún valor de referencia (por inflación, por ejemplo) o agregar una unidad nueva, edita o agrega una entrada ahí; aparece automáticamente en el filtro de la izquierda sin tocar nada más.
+
+## 7. Ideas para más adelante (opcional)
 
 - Si el archivo `casos.json` crece mucho y se vuelve incómodo de editar a mano, puedes migrar a una hoja de Google Sheets y exportarla a JSON, o a una base de datos real (Airtable, Supabase). Mientras el formato final que le llega a `index.html` sea un array JSON con estos mismos campos, la página sigue funcionando igual.
 - Si quieres un dominio propio (en vez de `.github.io` o `.netlify.app`), tanto GitHub Pages como Netlify permiten conectar un dominio comprado en cualquier proveedor (NIC Chile, GoDaddy, etc.) desde su panel de configuración.
