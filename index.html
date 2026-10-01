@@ -591,6 +591,14 @@
   }
   .equiv-sources-btn:hover{ border-color:var(--ink); color:var(--ink); }
 
+  .disclaimer-link-row{ margin-top:22px; }
+  .disclaimer-link-btn{
+    background:transparent; border:none; border-bottom:1px dotted var(--ink-faint);
+    color:var(--ink-soft); font-size:0.84rem; padding:0 0 2px; cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;
+  }
+  .disclaimer-link-btn:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+
   /* ---------- MODAL DE FUENTES ---------- */
   .modal-overlay{
     position:fixed; inset:0; background:rgba(22,28,43,0.55);
@@ -604,6 +612,8 @@
   }
   .modal-panel h3{ margin:0 0 8px; font-size:1.1rem; font-family:'Source Serif 4',serif; font-weight:600; }
   .modal-intro{ font-size:0.84rem; color:var(--ink-soft); margin:0 0 18px; }
+  .modal-panel p{ font-size:0.88rem; color:var(--ink-soft); line-height:1.55; margin:0 0 14px; }
+  .modal-panel p em{ color:var(--ink); font-style:italic; }
   .modal-close{
     position:absolute; top:16px; right:16px;
     background:transparent; border:1px solid var(--line-strong); color:var(--ink-soft);
@@ -671,8 +681,8 @@
         <div class="num-label" id="hero-total-label">millones de pesos documentados en las causas económicas de este expediente, sumando lo reportado por fiscalía, Contraloría y prensa</div>
       </div>
     </div>
-    <div class="disclaimer">
-      <strong>Presunción de inocencia.</strong> Mientras no exista sentencia firme, toda persona se presume inocente. Este expediente distingue expresamente entre <em>investigaciones abiertas</em>, <em>formalizaciones o imputaciones</em> (cargos presentados, sin condena) y <em>condenas</em>. Los datos provienen de reportajes periodísticos, Contraloría General de la República y el Ministerio Público — cada caso enlaza a su fuente. La clasificación de sector político (izquierda/centro/derecha) de personas independientes sigue la afinidad reportada en prensa y es una simplificación con fines informativos, no una afiliación formal. Los casos marcados como <em>"sin dinero involucrado"</em> (delitos sexuales, violencia intrafamiliar u otros) se muestran separados de los casos de corrupción económica y no se incluyen en sus gráficos de montos ni en el índice de sector político por corrupción; en las causas por delitos sexuales se evita todo detalle que no sea necesario para entender el estado judicial, y no se identifica a las personas denunciantes.
+    <div class="disclaimer-link-row">
+      <button type="button" id="disclaimer-link-btn" class="disclaimer-link-btn">⚖️ Presunción de inocencia y metodología de este expediente — ver más</button>
     </div>
   </header>
 
@@ -853,6 +863,17 @@
     <h3 id="equiv-modal-title">Fuentes de las equivalencias</h3>
     <p class="modal-intro">Cifras de referencia, no promedios oficiales — cada una corresponde a un caso real documentado.</p>
     <div id="equiv-modal-content"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="disclaimer-modal-overlay" style="display:none;">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="disclaimer-modal-title">
+    <button type="button" class="modal-close" id="disclaimer-modal-close" aria-label="Cerrar">✕</button>
+    <h3 id="disclaimer-modal-title">⚖️ Presunción de inocencia y metodología</h3>
+    <p>Mientras no exista sentencia firme, toda persona se presume inocente. Este expediente distingue expresamente entre <em>investigaciones abiertas</em>, <em>formalizaciones o imputaciones</em> (cargos presentados, sin condena) y <em>condenas</em>.</p>
+    <p>Los datos provienen de reportajes periodísticos, Contraloría General de la República y el Ministerio Público — cada caso enlaza a su fuente.</p>
+    <p>La clasificación de sector político (izquierda/centro/derecha) de personas independientes sigue la afinidad reportada en prensa y es una simplificación con fines informativos, no una afiliación formal.</p>
+    <p style="margin-bottom:0;">Los casos marcados como <em>"sin dinero involucrado"</em> (delitos sexuales, violencia intrafamiliar u otros) se muestran separados de los casos de corrupción económica y no se incluyen en sus gráficos de montos ni en el índice de sector político por corrupción; en las causas por delitos sexuales se evita todo detalle que no sea necesario para entender el estado judicial, y no se identifica a las personas denunciantes.</p>
   </div>
 </div>
 
@@ -1050,15 +1071,22 @@ function buildEquivFilter(){
     </div>
   `).join('');
 
-  const overlay = document.getElementById('equiv-modal-overlay');
+  const equivModal = setupModal('equiv-modal-overlay');
+  document.getElementById('equiv-sources-btn').addEventListener('click', equivModal.open);
+  window._openEquivModal = equivModal.open;
+}
+
+function setupModal(overlayId){
+  const overlay = document.getElementById(overlayId);
   const openModal = ()=>{ overlay.style.display = 'flex'; };
   const closeModal = ()=>{ overlay.style.display = 'none'; };
-  document.getElementById('equiv-sources-btn').addEventListener('click', openModal);
-  document.getElementById('equiv-modal-close').addEventListener('click', closeModal);
+  overlay.querySelectorAll('.modal-close').forEach(btn=>btn.addEventListener('click', closeModal));
   overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeModal(); });
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
-  window._openEquivModal = openModal;
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.style.display==='flex') closeModal(); });
+  return {open:openModal, close:closeModal};
 }
+const disclaimerModal = setupModal('disclaimer-modal-overlay');
+document.getElementById('disclaimer-link-btn').addEventListener('click', disclaimerModal.open);
 
 function buildSectorChips(){
   const el = document.getElementById('sector-chips');
