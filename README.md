@@ -6,9 +6,13 @@ Guía para publicar esta página en internet y para que tú mismo puedas agregar
 
 ```
 expediente-corrupcion-chile/
-├── index.html     ← la página completa (diseño, filtros, gráficos, mapa). No la edites a mano.
-├── casos.json     ← la "base de datos": un array con todos los casos. ESTE es el archivo que vas a editar.
-└── README.md      ← este archivo
+├── index.html            ← el sitio público (diseño, filtros, gráficos, mapa). No lo edites a mano.
+├── casos.json            ← la "base de datos": un array con todos los casos.
+├── admin.html            ← panel privado para agregar y editar casos (formulario + CSV + login).
+├── casos.csv             ← copia de todos los casos en formato CSV (para Excel / Google Sheets).
+├── plantilla-casos.csv   ← CSV vacío con los encabezados y una fila de ejemplo.
+├── plantilla-caso.json   ← un caso en blanco en formato JSON.
+└── README.md             ← este archivo
 ```
 
 `index.html` carga `casos.json` automáticamente al abrirse (con `fetch('casos.json')`). Por eso **los dos archivos siempre tienen que estar juntos, en la misma carpeta**, tanto en tu computador como en el hosting. Si subes solo el HTML, la página va a cargar pero se va a ver vacía (sin casos).
@@ -143,7 +147,62 @@ En la barra de filtros, a la izquierda, hay un filtro **"Ver montos como"** con 
 
 Las cifras de referencia que usa están adentro de `index.html`, en el bloque `EQUIVALENCIAS` (búscalo con Ctrl+F) — cada una tiene su fuente real, no son promedios inventados. Si quieres actualizar algún valor de referencia (por inflación, por ejemplo) o agregar una unidad nueva, edita o agrega una entrada ahí; aparece automáticamente en el filtro de la izquierda sin tocar nada más.
 
-## 7. Ideas para más adelante (opcional)
+## 7. Panel de administración (admin.html)
+
+`admin.html` es una página aparte, pensada solo para ti, con la que puedes **agregar y modificar casos con un formulario**, **importar y exportar CSV** y **publicar los cambios** sin editar JSON a mano. Se sube al mismo repositorio que el resto de los archivos y queda disponible en `https://tu-usuario.github.io/tu-repositorio/admin.html`.
+
+### Cómo funciona el login (y qué tan seguro es)
+
+Tu sitio es estático: no tiene servidor propio donde guardar usuarios y contraseñas. Por eso el panel usa **GitHub como sistema de acceso**: para ingresar necesitas un *token personal* de GitHub, y solo quien tenga ese token puede guardar cambios en el repositorio. Dicho de otro modo:
+
+- La página `admin.html` es pública (cualquiera puede abrirla), pero **sin un token válido no puede ver ni modificar nada**: la lista de casos se lee y se guarda a través de la API de GitHub, que exige el token.
+- El token **nunca está escrito en el código**. Se guarda únicamente en la memoria de la pestaña mientras la tienes abierta, y se borra al cerrar sesión o cerrar la pestaña.
+- Cada guardado queda registrado en GitHub (pestaña *Commits*): quién cambió qué y cuándo, y puedes volver a cualquier versión anterior si algo sale mal.
+
+Límites que conviene conocer: no hay usuarios distintos ni permisos por rol (cualquiera con un token válido puede editar todo), y un token filtrado equivale a una llave filtrada. Si más adelante necesitas varias personas con cuentas y permisos separados, el siguiente paso es una base de datos con autenticación propia (por ejemplo Supabase o Firebase); la estructura de campos de este panel se puede reutilizar tal cual.
+
+### Cómo crear el token (una sola vez)
+
+1. En GitHub: tu foto de perfil → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**.
+2. *Resource owner*: tu cuenta. *Repository access*: **Only select repositories**, y elige solo el repositorio del expediente.
+3. *Permissions* → *Repository permissions* → **Contents: Read and write**. No necesita ningún otro permiso.
+4. Pon una fecha de vencimiento (por ejemplo 90 días), genera el token y cópialo. GitHub lo muestra una sola vez.
+5. Si lo pierdes o sospechas que lo vio alguien más, revócalo en esa misma pantalla y crea otro.
+
+### Uso diario
+
+1. Abre `.../admin.html`, escribe tu usuario de GitHub, el nombre del repositorio, la rama (`main`) y pega el token. El panel recuerda los datos del repositorio, **nunca el token**.
+2. Busca y filtra casos. Usa **Editar**, **Duplicar** o **Eliminar**, o **Nuevo caso** para abrir el formulario. El formulario valida los datos antes de guardar (campos obligatorios, valores permitidos, enlaces, años, montos, ID único).
+3. Los cambios quedan como **borrador** (un contador arriba te dice cuántos hay). Cada caso nuevo o editado se marca en la tabla. **Deshacer todo** descarta el borrador.
+4. Cuando estés conforme, **Publicar cambios**: te muestra un resumen (agregados, editados, eliminados) y guarda una nueva versión de `casos.json` en GitHub. El sitio público se actualiza en 1 a 2 minutos.
+
+Si al publicar aparece un aviso de "el archivo cambió en GitHub", significa que alguien lo modificó mientras trabajabas: usa **Descargar JSON** para respaldar tu borrador, **Recargar desde GitHub** y vuelve a aplicar tus cambios. La primera vez que publiques, el archivo `casos.json` se reordena (los campos quedan siempre en el mismo orden); es normal.
+
+> El panel no funciona dentro de la vista previa de claude.ai (esa vista bloquea las conexiones externas). Úsalo desde tu sitio publicado o en tu computador con `python3 -m http.server`.
+
+### Formato CSV
+
+El CSV tiene **una fila por caso** y estas 19 columnas, en este orden (los encabezados deben escribirse exactamente así):
+
+`id; titulo; personas; partido; sector; nivel; comuna; imagen; anioInicio; anioFin; monto; montoNota; categoria; delito; estadoCategoria; estado; descripcion; fuente; fuenteLabel`
+
+Reglas:
+
+- **Codificación UTF-8** (para que se vean bien las tildes y la ñ). El panel acepta separador **punto y coma** (el que usa Excel en español) o **coma**, y lo detecta solo.
+- **Textos con comas, punto y coma o saltos de línea** van entre comillas dobles (`"..."`); una comilla dentro del texto se escribe doble (`""`). Excel y Google Sheets lo hacen automáticamente al guardar como CSV.
+- **`id`**: identifica al caso. Si el `id` ya existe, ese caso se **actualiza**; si no existe, se **agrega** como caso nuevo. Si lo dejas vacío en una fila nueva, se genera uno solo.
+- **Casos nuevos**: deben traer todos los campos obligatorios (todos menos `comuna`, `imagen`, `anioFin`, `monto`, `montoNota` y `delito`).
+- **Casos existentes**: las columnas que no incluyas y las celdas vacías **no modifican nada**. Para borrar un dato (por ejemplo quitar un monto) usa el formulario.
+- **`sector`**: Izquierda, Centro, Derecha, Independiente, Multipartidista o Sin clasificar. **`nivel`**: Nacional, Regional o Municipal. **`categoria`**: `economico` o `no_economico`. **`estadoCategoria`**: `investigacion`, `formalizado`, `condenado` o `cerrado_sin_condena`.
+- **`monto`** en millones de pesos, con punto como decimal (`147.29`) y sin separador de miles. También se entiende la coma decimal (`147,29`).
+- **`anioInicio` / `anioFin`**: años de 4 dígitos.
+- Los textos no pueden contener los caracteres `<` ni `>`.
+
+Al importar, el panel muestra una **vista previa** (cuántos casos son nuevos, cuáles se actualizan, cuáles quedan sin cambios y qué filas tienen errores, con el número de fila y el motivo) antes de tocar nada. Las filas con errores se omiten; el resto se aplica al borrador y recién se publica cuando tú lo decides. Hay dos modos: **Fusionar** (actualiza y agrega, no borra) y **Reemplazar todo** (el CSV pasa a ser la lista completa y elimina los casos que no estén en él; pide confirmación).
+
+**Para mantener la información al día:** cuando necesites datos actualizados, pídemelos en este mismo formato y te entrego un CSV con estas 19 columnas (UTF-8, separador `;`) que puedes cargar con **Importar CSV**. Si te sirve revisarlo antes en Excel, `casos.csv` y `plantilla-casos.csv` son el punto de partida.
+
+## 8. Ideas para más adelante (opcional)
 
 - Si el archivo `casos.json` crece mucho y se vuelve incómodo de editar a mano, puedes migrar a una hoja de Google Sheets y exportarla a JSON, o a una base de datos real (Airtable, Supabase). Mientras el formato final que le llega a `index.html` sea un array JSON con estos mismos campos, la página sigue funcionando igual.
 - Si quieres un dominio propio (en vez de `.github.io` o `.netlify.app`), tanto GitHub Pages como Netlify permiten conectar un dominio comprado en cualquier proveedor (NIC Chile, GoDaddy, etc.) desde su panel de configuración.

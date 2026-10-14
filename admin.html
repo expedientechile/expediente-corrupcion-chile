@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Administración · Expediente Público</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f5f1; --raised:#ffffff; --ink:#161c2b; --soft:#525a6b; --faint:#8790a0;
+    --line:#d9dad2; --line2:#b9bbb0; --stamp:#8b2e2e; --focus:#1c4fd6;
+    --ok:#2f6f4a; --ok-bg:#e3efe8; --warn:#9a5a14; --warn-bg:#f5ead8; --err:#a12a2a; --err-bg:#f6e2e2;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',system-ui,sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Source Serif 4',Georgia,serif; font-weight:600; margin:0;}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+  button{font-family:inherit;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- buttons & inputs ---------- */
+  .btn{border:1px solid var(--line2); background:var(--raised); color:var(--ink); padding:8px 14px; font-size:0.86rem; cursor:pointer; line-height:1.2;}
+  .btn:hover{border-color:var(--ink);}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+  .btn-primary{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .btn-primary:hover{background:#2a3350;}
+  .btn-danger{color:var(--err); border-color:#d9b3b3;}
+  .btn-danger:hover{border-color:var(--err);}
+  .btn-ghost{border-color:transparent; background:transparent; color:var(--soft); padding:6px 8px;}
+  .btn-ghost:hover{color:var(--ink); border-color:var(--line2);}
+  .btn-sm{padding:4px 9px; font-size:0.78rem;}
+  input[type=text],input[type=password],input[type=search],select,textarea{
+    width:100%; padding:9px 10px; border:1px solid var(--line2); background:var(--raised); color:var(--ink);
+    font-family:inherit; font-size:0.9rem; border-radius:0;
+  }
+  textarea{min-height:120px; resize:vertical; line-height:1.5;}
+  label.fld{display:block; font-size:0.8rem; color:var(--soft); margin-bottom:5px; font-weight:500;}
+  .help{font-size:0.74rem; color:var(--faint); margin-top:4px; line-height:1.4;}
+  .req{color:var(--stamp);}
+
+  /* ---------- login ---------- */
+  .login-wrap{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .login-card{width:100%; max-width:460px; background:var(--raised); border:1px solid var(--line); padding:32px;}
+  .login-card h1{font-size:1.5rem; margin-bottom:6px;}
+  .login-card .sub{color:var(--soft); font-size:0.88rem; margin:0 0 24px;}
+  .login-card .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .login-card .fgrp{margin-bottom:14px;}
+  .alert{padding:10px 12px; font-size:0.84rem; margin:0 0 16px; border-left:3px solid;}
+  .alert-err{background:var(--err-bg); border-color:var(--err); color:#5a1a1a;}
+  .alert-ok{background:var(--ok-bg); border-color:var(--ok); color:#1d4630;}
+  .alert-warn{background:var(--warn-bg); border-color:var(--warn); color:#5c3509;}
+  details.howto{margin-top:20px; border-top:1px solid var(--line); padding-top:14px; font-size:0.84rem; color:var(--soft);}
+  details.howto summary{cursor:pointer; color:var(--ink); font-weight:500;}
+  details.howto ol{padding-left:18px; margin:10px 0 0;}
+  details.howto li{margin-bottom:6px;}
+
+  /* ---------- app shell ---------- */
+  .topbar{background:var(--raised); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20;}
+  .topbar-in{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; flex-wrap:wrap; gap:12px 16px; align-items:center; justify-content:space-between;}
+  .brand{display:flex; flex-direction:column;}
+  .brand h1{font-size:1.1rem;}
+  .brand .repo{font-size:0.76rem; color:var(--faint);}
+  .top-actions{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .pending{font-size:0.8rem; color:var(--warn); background:var(--warn-bg); padding:4px 10px;}
+  .pending.zero{color:var(--ok); background:var(--ok-bg);}
+  .wrap{max-width:1280px; margin:0 auto; padding:20px 24px 60px;}
+  .data-actions{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:18px;}
+  .data-actions .spacer{flex:1;}
+  .toolbar{display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:14px; align-items:end;}
+  .toolbar .fgrp{min-width:0;}
+  .count{font-size:0.8rem; color:var(--faint); margin:0 0 8px;}
+
+  /* ---------- table ---------- */
+  .tbl-wrap{background:var(--raised); border:1px solid var(--line); overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:0.86rem;}
+  th{text-align:left; font-weight:500; font-size:0.78rem; color:var(--soft); padding:10px 12px; border-bottom:1px solid var(--line2); background:#fafaf7; white-space:nowrap;}
+  td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:#fbfbf8;}
+  td .t{font-weight:500;}
+  td .p{font-size:0.78rem; color:var(--faint); max-width:46ch;}
+  .tag{display:inline-block; font-size:0.72rem; padding:2px 8px; font-weight:500; white-space:nowrap;}
+  .sec-Izquierda{background:#f6e6e5; color:#a8353a;} .sec-Centro{background:#f3e9d3; color:#8a6314;}
+  .sec-Derecha{background:#e3e9f1; color:#2c4c78;} .sec-Independiente{background:#eae5ef; color:#5f5470;}
+  .sec-Multipartidista,.sec-Sin\ clasificar{background:#e2ece9; color:#3f6f68;}
+  .est-condenado{border:1.5px solid var(--stamp); color:var(--stamp);} .est-formalizado{border:1.5px solid #a8631c; color:#a8631c;}
+  .est-investigacion{border:1.5px solid var(--soft); color:var(--soft);} .est-cerrado_sin_condena{border:1.5px solid var(--line2); color:var(--faint);}
+  .chg{font-size:0.7rem; padding:1px 6px; margin-left:6px; vertical-align:middle;}
+  .chg-new{background:var(--ok-bg); color:var(--ok);} .chg-mod{background:var(--warn-bg); color:var(--warn);}
+  td.acts{white-space:nowrap; text-align:right;}
+  .empty{padding:40px; text-align:center; color:var(--faint);}
+
+  /* ---------- modal / drawer ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(22,28,43,.5); z-index:50; display:flex; justify-content:flex-end;}
+  .overlay.center{justify-content:center; align-items:center; padding:20px;}
+  .drawer{background:var(--raised); width:100%; max-width:720px; height:100%; overflow-y:auto; padding:28px; border-left:1px solid var(--line);}
+  .dialog{background:var(--raised); width:100%; max-width:640px; max-height:90vh; overflow-y:auto; padding:28px; border:1px solid var(--line);}
+  .drawer h2,.dialog h2{font-size:1.25rem; margin-bottom:4px;}
+  .drawer .sub,.dialog .sub{font-size:0.84rem; color:var(--soft); margin:0 0 20px;}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px 14px;}
+  .form-grid .wide{grid-column:1 / -1;}
+  .form-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:22px; padding-top:16px; border-top:1px solid var(--line); position:sticky; bottom:-28px; background:var(--raised); padding-bottom:12px;}
+  .errs{background:var(--err-bg); border-left:3px solid var(--err); padding:10px 14px; margin-bottom:16px; font-size:0.84rem; color:#5a1a1a;}
+  .errs ul{margin:6px 0 0; padding-left:18px;}
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0 18px;}
+  .stat{border:1px solid var(--line); padding:10px 12px;}
+  .stat .n{font-family:'IBM Plex Mono',monospace; font-size:1.4rem; font-weight:500;}
+  .stat .l{font-size:0.76rem; color:var(--soft);}
+  .radio-row{display:flex; flex-direction:column; gap:8px; margin:12px 0;}
+  .radio-row label{display:flex; gap:8px; font-size:0.86rem; align-items:flex-start;}
+  .radio-row input{margin-top:4px;}
+  ul.mini{margin:6px 0 14px; padding-left:18px; font-size:0.82rem; color:var(--soft); max-height:150px; overflow-y:auto;}
+  .toast{position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; font-size:0.86rem; z-index:100; max-width:90vw;}
+  .toast.err{background:var(--err);} .toast.ok{background:var(--ok);}
+  .csv-delim{display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--soft);}
+  .csv-delim select{width:auto; padding:5px 8px; font-size:0.78rem;}
+
+  @media (max-width: 900px){
+    .toolbar{grid-template-columns:1fr 1fr;}
+    .form-grid{grid-template-columns:1fr;}
+    .stats{grid-template-columns:1fr 1fr;}
+    .wrap{padding:16px 14px 60px;} .topbar-in{padding:10px 14px;}
+    .drawer,.dialog{padding:20px;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; scroll-behavior:auto !important;} }
+</style>
+</head>
+<body>
+
+<!-- ============================ LOGIN ============================ -->
+<div class="login-wrap" id="login-view">
+  <form class="login-card" id="login-form" autocomplete="off">
+    <h1>Administración del expediente</h1>
+    <p class="sub">Ingresa con un token de GitHub. Solo quien tenga permiso de escritura en el repositorio puede guardar cambios.</p>
+    <div id="login-error" class="alert alert-err" hidden></div>
+    <div class="row2">
+      <div class="fgrp"><label class="fld" for="l-owner">Usuario u organización de GitHub</label><input type="text" id="l-owner" required placeholder="tu-usuario"></div>
+      <div class="fgrp"><label class="fld" for="l-repo">Nombre del repositorio</label><input type="text" id="l-repo" required placeholder="expediente-corrupcion-chile"></div>
+    </div>
+    <div class="row2">
+      <div class="fgrp"><label class="fld" for="l-branch">Rama</label><input type="text" id="l-branch" value="main" required></div>
+      <div class="fgrp"><label class="fld" for="l-path">Archivo de datos</label><input type="text" id="l-path" value="casos.json" required></div>
+    </div>
+    <div class="fgrp"><label class="fld" for="l-token">Token de acceso personal</label><input type="password" id="l-token" required placeholder="github_pat_..." autocomplete="new-password"><div class="help">El token se guarda solo mientras esta pestaña esté abierta. Nunca queda escrito en el código ni en el sitio.</div></div>
+    <button class="btn btn-primary" type="submit" id="login-btn" style="width:100%; padding:11px;">Ingresar</button>
+    <details class="howto">
+      <summary>¿Cómo creo el token?</summary>
+      <ol>
+        <li>En GitHub: tu foto → Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token.</li>
+        <li>Resource owner: tu cuenta. Repository access: <em>Only select repositories</em> y elige solo este repositorio.</li>
+        <li>Permissions → Repository permissions → <em>Contents</em>: Read and write.</li>
+        <li>Fija una fecha de vencimiento (por ejemplo 90 días), genera el token y cópialo aquí.</li>
+      </ol>
+    </details>
+  </form>
+</div>
+
+<!-- ============================ APP ============================ -->
+<div id="app-view" hidden>
+  <header class="topbar">
+    <div class="topbar-in">
+      <div class="brand">
+        <h1>Casos del expediente</h1>
+        <span class="repo mono" id="repo-label"></span>
+      </div>
+      <div class="top-actions">
+        <span class="pending zero" id="pending-badge">Sin cambios</span>
+        <button class="btn btn-primary" id="btn-publish" disabled>Publicar cambios</button>
+        <button class="btn btn-ghost" id="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="data-actions">
+      <button class="btn" id="btn-new">Nuevo caso</button>
+      <button class="btn" id="btn-import">Importar CSV</button>
+      <button class="btn" id="btn-export">Exportar CSV</button>
+      <span class="csv-delim"><label for="csv-delim">Separador</label>
+        <select id="csv-delim"><option value=";">Punto y coma (Excel en español)</option><option value=",">Coma</option></select></span>
+      <span class="spacer"></span>
+      <button class="btn btn-ghost" id="btn-json">Descargar JSON</button>
+      <button class="btn btn-ghost" id="btn-reload">Recargar desde GitHub</button>
+    </div>
+    <div class="toolbar">
+      <div class="fgrp"><label class="fld" for="q">Buscar</label><input type="search" id="q" placeholder="Título, persona, partido, comuna o id"></div>
+      <div class="fgrp"><label class="fld" for="f-cat">Tipo</label><select id="f-cat"><option value="">Todos</option><option value="economico">Económicos</option><option value="no_economico">Sin dinero involucrado</option></select></div>
+      <div class="fgrp"><label class="fld" for="f-est">Estado</label><select id="f-est"><option value="">Todos</option></select></div>
+      <div class="fgrp"><label class="fld" for="f-sec">Sector</label><select id="f-sec"><option value="">Todos</option></select></div>
+      <button class="btn btn-ghost" id="btn-undo" title="Descarta los cambios no publicados">Deshacer todo</button>
+    </div>
+    <p class="count" id="count"></p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Caso</th><th>Partido</th><th>Sector</th><th>Estado</th><th>Año</th><th>Monto (M$)</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>
+  </main>
+</div>
+
+<!-- ============================ EDITOR ============================ -->
+<div class="overlay" id="editor-overlay" hidden>
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+    <h2 id="editor-title">Editar caso</h2>
+    <p class="sub" id="editor-sub">Los cambios quedan pendientes hasta que pulses «Publicar cambios».</p>
+    <div id="editor-errors" class="errs" hidden></div>
+    <form id="editor-form" novalidate><div class="form-grid" id="editor-grid"></div>
+      <div class="form-actions">
+        <button type="button" class="btn" id="editor-cancel">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar caso</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================ IMPORT ============================ -->
+<div class="overlay center" id="import-overlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="import-title">
+    <h2 id="import-title">Importar casos desde CSV</h2>
+    <p class="sub">El archivo debe tener una fila de encabezados con los mismos nombres de campo del JSON (ver la plantilla). Acepta separador coma o punto y coma, y codificación UTF-8.</p>
+    <div id="import-step1">
+      <input type="file" id="import-file" accept=".csv,text/csv">
+      <div class="help">Si el id de una fila ya existe, ese caso se actualiza; si no existe, se agrega como caso nuevo (y entonces debe traer todos los campos obligatorios). En los casos existentes, las columnas ausentes y las celdas vacías no modifican nada; para borrar un dato usa el formulario.</div>
+    </div>
+    <div id="import-step2" hidden>
+      <div class="stats" id="import-stats"></div>
+      <div id="import-errors"></div>
+      <div id="import-lists"></div>
+      <div class="radio-row" id="import-mode">
+        <label><input type="radio" name="imode" value="merge" checked><span><strong>Fusionar</strong> — actualiza los existentes y agrega los nuevos; no borra nada.</span></label>
+        <label><input type="radio" name="imode" value="replace"><span><strong>Reemplazar todo</strong> — el CSV pasa a ser la lista completa; los casos que no estén en el CSV se eliminan (<span id="import-del-count">0</span> casos).</span></label>
+      </div>
+    </div>
+    <div class="form-actions" style="position:static; border:none; padding-top:6px; margin-top:12px;">
+      <button type="button" class="btn" id="import-cancel">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="import-apply" disabled>Aplicar al borrador</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ PUBLISH ============================ -->
+<div class="overlay center" id="publish-overlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="publish-title">
+    <h2 id="publish-title">Publicar cambios en GitHub</h2>
+    <p class="sub">Se guardará una nueva versión de <span class="mono" id="publish-path"></span>. El sitio público se actualiza en 1 a 2 minutos.</p>
+    <div class="stats" id="publish-stats"></div>
+    <div id="publish-lists"></div>
+    <label class="fld" for="publish-msg">Mensaje del cambio</label>
+    <input type="text" id="publish-msg">
+    <div id="publish-error" class="alert alert-err" style="margin-top:14px;" hidden></div>
+    <div class="form-actions" style="position:static; border:none; padding-top:6px; margin-top:12px;">
+      <button type="button" class="btn" id="publish-cancel">Cancelar</button>
+      <button type="button" class="btn btn-primary" id="publish-confirm">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ======================================================================
+   DEFINICIÓN DE CAMPOS (una sola fuente de verdad: formulario, CSV y validación)
+   ====================================================================== */
+const SECTORES = ['Izquierda','Centro','Derecha','Independiente','Multipartidista','Sin clasificar'];
+const ESTADOS = ['investigacion','formalizado','condenado','cerrado_sin_condena'];
+const ESTADO_LABEL = {investigacion:'Investigación abierta', formalizado:'Formalizado / imputado', condenado:'Condenado', cerrado_sin_condena:'Cerrado sin condena'};
+const FIELDS = [
+  {key:'id', label:'ID único', type:'text', required:true, help:'Identificador interno, sin espacios ni tildes (ej: m-lasrosas-2026). Si lo dejas vacío se genera solo.'},
+  {key:'titulo', label:'Título', type:'text', required:true, wide:true},
+  {key:'personas', label:'Personas involucradas', type:'text', required:true, wide:true, help:'Nombre y cargo.'},
+  {key:'partido', label:'Partido o militancia', type:'text', required:true, help:'Ej: UDI, RN, PS, «Independiente (afín a RN)». La insignia del partido se detecta sola.'},
+  {key:'sector', label:'Sector político', type:'select', required:true, options:SECTORES},
+  {key:'nivel', label:'Nivel', type:'select', required:true, options:['Nacional','Regional','Municipal']},
+  {key:'comuna', label:'Comuna (para el mapa)', type:'text', help:'Nombre exacto de la comuna; vacío si es un caso nacional.'},
+  {key:'imagen', label:'URL de la foto (opcional)', type:'url'},
+  {key:'anioInicio', label:'Año de inicio', type:'number', required:true},
+  {key:'anioFin', label:'Año de término', type:'number', help:'Vacío si el caso sigue abierto.'},
+  {key:'monto', label:'Monto en millones de $', type:'number', help:'Punto como decimal, sin separador de miles. Vacío si no aplica.'},
+  {key:'montoNota', label:'Nota sobre el monto', type:'text', wide:true},
+  {key:'categoria', label:'Tipo de caso', type:'select', required:true, options:['economico','no_economico'], labels:{economico:'Económico (con dinero)', no_economico:'Sin dinero involucrado'}},
+  {key:'delito', label:'Delito (solo casos sin dinero)', type:'text', help:'Ej: Delito sexual, Conducción en estado de ebriedad.'},
+  {key:'estadoCategoria', label:'Estado judicial', type:'select', required:true, options:ESTADOS, labels:ESTADO_LABEL},
+  {key:'estado', label:'Detalle del estado', type:'text', required:true, wide:true, help:'Texto que se muestra en la tarjeta. Distingue acusación de condena.'},
+  {key:'descripcion', label:'Descripción', type:'textarea', required:true, wide:true, help:'Tono neutro. Usa «formalizado por», «investigado por»; no afirmes culpabilidad sin condena.'},
+  {key:'fuente', label:'Enlace a la fuente', type:'url', required:true, wide:true},
+  {key:'fuenteLabel', label:'Nombre de la fuente', type:'text', required:true, help:'Ej: La Tercera, Cooperativa.'}
+];
+const FKEYS = FIELDS.map(f=>f.key);
+
+/* ======================================================================
+   ESTADO
+   ====================================================================== */
+let session = null;      // {owner, repo, branch, path, token}
+let sha = null;          // sha actual del archivo en GitHub
+let cases = [];          // borrador de trabajo
+let snapshot = '[]';     // JSON del último estado publicado/cargado
+let editingIndex = null; // null = caso nuevo
+let importPlan = null;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const slug = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+function toast(msg, kind){ const t=$('#toast'); t.textContent=msg; t.className='toast '+(kind||''); t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true, 4200); }
+
+function normalizeCase(c){
+  const out = {};
+  FKEYS.forEach(k => { out[k] = (c[k] === undefined || c[k] === '') ? null : c[k]; });
+  if(!out.categoria) out.categoria = 'economico';
+  Object.keys(c).forEach(k => { if(!FKEYS.includes(k)) out[k] = c[k]; });
+  return out;
+}
+
+/* ======================================================================
+   GITHUB
+   ====================================================================== */
+const encPath = p => p.split('/').map(encodeURIComponent).join('/');
+function b64ToUtf8(b64){ const bin=atob(b64.replace(/\s/g,'')); const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0)); return new TextDecoder().decode(bytes); }
+function utf8ToB64(str){ const bytes=new TextEncoder().encode(str); let bin=''; for(let i=0;i<bytes.length;i+=0x8000){ bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000)); } return btoa(bin); }
+
+async function gh(path, opts={}){
+  const r = await fetch('https://api.github.com'+path, {...opts, headers:{
+    'Accept':'application/vnd.github+json','Authorization':'Bearer '+session.token,
+    'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json', ...(opts.headers||{})}});
+  let data = null; try{ data = await r.json(); }catch(e){}
+  if(!r.ok){ const err = new Error((data && data.message) || ('HTTP '+r.status)); err.status = r.status; throw err; }
+  return data;
+}
+function friendlyError(err){
+  if(err.status===401) return 'El token no es válido o ya venció. Genera uno nuevo en GitHub.';
+  if(err.status===403) return 'GitHub rechazó la operación: el token no tiene permiso de escritura (Contents: Read and write) o se alcanzó el límite de uso.';
+  if(err.status===404) return 'No se encontró el repositorio o el archivo. Revisa usuario, nombre del repositorio, rama y ruta; si el repositorio es privado, el token debe tener acceso a él.';
+  if(err.status===409 || err.status===422) return 'El archivo cambió en GitHub después de que lo cargaste (o la rama está protegida). Descarga tu borrador, pulsa «Recargar desde GitHub» y vuelve a aplicar tus cambios.';
+  return err.message || 'Error desconocido al hablar con GitHub.';
+}
+async function loadRemote(){
+  const {owner,repo,branch,path} = session;
+  const data = await gh(`/repos/${owner}/${repo}/contents/${encPath(path)}?ref=${encodeURIComponent(branch)}`);
+  if(Array.isArray(data) || !data.content) throw Object.assign(new Error('No se pudo leer el archivo (¿es una carpeta o pesa más de 1 MB?).'),{status:0});
+  const arr = JSON.parse(b64ToUtf8(data.content));
+  if(!Array.isArray(arr)) throw Object.assign(new Error('El archivo no contiene una lista de casos.'),{status:0});
+  sha = data.sha;
+  cases = arr.map(normalizeCase);
+  snapshot = JSON.stringify(cases);
+}
+
+/* ======================================================================
+   LOGIN
+   ====================================================================== */
+function showLoginError(msg){ const e=$('#login-error'); e.textContent=msg; e.hidden=false; }
+async function doLogin(s){
+  session = s;
+  const repoInfo = await gh(`/repos/${s.owner}/${s.repo}`);
+  if(repoInfo.permissions && repoInfo.permissions.push === false) throw Object.assign(new Error('Tu token puede leer el repositorio pero no escribir en él.'),{status:0});
+  await loadRemote();
+  sessionStorage.setItem('adm_session', JSON.stringify(s));
+  localStorage.setItem('adm_prefs', JSON.stringify({owner:s.owner,repo:s.repo,branch:s.branch,path:s.path}));
+  $('#login-view').hidden = true; $('#app-view').hidden = false;
+  $('#repo-label').textContent = `${s.owner}/${s.repo} · ${s.branch} · ${s.path}`;
+  buildFilters(); render();
+}
+$('#login-form').addEventListener('submit', async e=>{
+  e.preventDefault(); $('#login-error').hidden = true;
+  const s = {owner:$('#l-owner').value.trim(), repo:$('#l-repo').value.trim(), branch:$('#l-branch').value.trim()||'main', path:$('#l-path').value.trim()||'casos.json', token:$('#l-token').value.trim()};
+  const btn = $('#login-btn'); btn.disabled = true; btn.textContent = 'Verificando…';
+  try{ await doLogin(s); $('#l-token').value=''; }
+  catch(err){ session = null; showLoginError(friendlyError(err)); }
+  finally{ btn.disabled = false; btn.textContent = 'Ingresar'; }
+});
+function logout(){
+  if(pendingCount()>0 && !confirm('Tienes cambios sin publicar que se perderán. ¿Cerrar sesión de todos modos?')) return;
+  session=null; sha=null; cases=[]; snapshot='[]';
+  sessionStorage.removeItem('adm_session');
+  $('#app-view').hidden = true; $('#login-view').hidden = false;
+}
+$('#btn-logout').addEventListener('click', logout);
+(function restore(){
+  try{ const p = JSON.parse(localStorage.getItem('adm_prefs')||'null'); if(p){ $('#l-owner').value=p.owner||''; $('#l-repo').value=p.repo||''; $('#l-branch').value=p.branch||'main'; $('#l-path').value=p.path||'casos.json'; } }catch(e){}
+  try{ const s = JSON.parse(sessionStorage.getItem('adm_session')||'null'); if(s && s.token){ doLogin(s).catch(()=>{ session=null; sessionStorage.removeItem('adm_session'); }); } }catch(e){}
+})();
+
+/* ======================================================================
+   DIFF / ESTADO DE CAMBIOS
+   ====================================================================== */
+function computeDiff(){
+  const orig = JSON.parse(snapshot);
+  const om = new Map(orig.map(c=>[c.id, JSON.stringify(c)]));
+  const cm = new Map(cases.map(c=>[c.id, JSON.stringify(c)]));
+  return {
+    added: [...cm.keys()].filter(id=>!om.has(id)),
+    deleted: [...om.keys()].filter(id=>!cm.has(id)),
+    modified: [...cm.keys()].filter(id=>om.has(id) && om.get(id)!==cm.get(id)),
+    origTitles: new Map(orig.map(c=>[c.id,c.titulo]))
+  };
+}
+function pendingCount(){ const d=computeDiff(); return d.added.length+d.deleted.length+d.modified.length; }
+function updatePending(){
+  const n = pendingCount(); const b = $('#pending-badge');
+  b.textContent = n ? `${n} ${n===1?'cambio sin publicar':'cambios sin publicar'}` : 'Sin cambios';
+  b.className = 'pending'+(n?'':' zero');
+  $('#btn-publish').disabled = !n;
+}
+window.addEventListener('beforeunload', e=>{ if(session && pendingCount()>0){ e.preventDefault(); e.returnValue=''; } });
+
+/* ======================================================================
+   TABLA
+   ====================================================================== */
+function buildFilters(){
+  const fe=$('#f-est'), fs=$('#f-sec');
+  if(fe.options.length<2) ESTADOS.forEach(e=>fe.add(new Option(ESTADO_LABEL[e], e)));
+  if(fs.options.length<2) SECTORES.forEach(s=>fs.add(new Option(s, s)));
+}
+function render(){
+  const q = $('#q').value.trim().toLowerCase(), fc=$('#f-cat').value, fe=$('#f-est').value, fs=$('#f-sec').value;
+  const d = computeDiff(); const addedSet=new Set(d.added), modSet=new Set(d.modified);
+  const rows = cases.map((c,i)=>({c,i})).filter(({c})=>{
+    if(fc && c.categoria!==fc) return false; if(fe && c.estadoCategoria!==fe) return false; if(fs && c.sector!==fs) return false;
+    if(q){ const hay=[c.titulo,c.personas,c.partido,c.comuna,c.id].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
+    return true;
+  }).sort((a,b)=>(b.c.anioInicio||0)-(a.c.anioInicio||0));
+  $('#count').textContent = `${rows.length} de ${cases.length} casos`;
+  $('#tbody').innerHTML = rows.length ? rows.map(({c,i})=>`
+    <tr>
+      <td><div class="t">${esc(c.titulo)}${addedSet.has(c.id)?'<span class="chg chg-new">nuevo</span>':modSet.has(c.id)?'<span class="chg chg-mod">editado</span>':''}</div><div class="p">${esc(c.personas)}</div></td>
+      <td>${esc(c.partido)}</td>
+      <td><span class="tag sec-${esc(c.sector)}">${esc(c.sector)}</span></td>
+      <td><span class="tag est-${esc(c.estadoCategoria)}">${esc(ESTADO_LABEL[c.estadoCategoria]||c.estadoCategoria)}</span></td>
+      <td class="mono">${esc(c.anioInicio)}</td>
+      <td class="mono">${c.monto==null?'—':esc(c.monto)}</td>
+      <td class="acts"><button class="btn btn-sm" data-act="edit" data-i="${i}">Editar</button> <button class="btn btn-sm" data-act="dup" data-i="${i}">Duplicar</button> <button class="btn btn-sm btn-danger" data-act="del" data-i="${i}">Eliminar</button></td>
+    </tr>`).join('') : `<tr><td colspan="7" class="empty">Ningún caso coincide con los filtros.</td></tr>`;
+  updatePending();
+}
+['#q','#f-cat','#f-est','#f-sec'].forEach(s=>$(s).addEventListener('input', render));
+$('#tbody').addEventListener('click', e=>{
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const i = +b.dataset.i, act = b.dataset.act;
+  if(act==='edit') openEditor(i);
+  else if(act==='dup'){ const c = JSON.parse(JSON.stringify(cases[i])); c.id=''; c.titulo += ' (copia)'; openEditor(null, c); }
+  else if(act==='del'){ if(confirm(`¿Eliminar el caso «${cases[i].titulo}»?\nQuedará pendiente hasta que publiques los cambios.`)){ cases.splice(i,1); render(); toast('Caso eliminado del borrador.'); } }
+});
+$('#btn-undo').addEventListener('click', ()=>{
+  if(!pendingCount()) return toast('No hay cambios que deshacer.');
+  if(confirm('¿Descartar todos los cambios no publicados?')){ cases = JSON.parse(snapshot); render(); toast('Cambios descartados.'); }
+});
+
+/* ======================================================================
+   VALIDACIÓN
+   ====================================================================== */
+function validateCase(c, otherIds){
+  const errs = [];
+  FIELDS.forEach(f=>{
+    const v = c[f.key];
+    if(f.required && (v===null || v===undefined || v==='')) errs.push(`Falta el campo «${f.label}».`);
+    if(v!==null && v!==undefined && v!==''){
+      if(f.type==='select' && !f.options.includes(v)) errs.push(`«${f.label}» tiene un valor no válido: «${v}». Opciones: ${f.options.join(', ')}.`);
+      if(f.type==='number' && (typeof v!=='number' || !isFinite(v))) errs.push(`«${f.label}» debe ser un número (usa punto como decimal).`);
+      if((f.type==='text'||f.type==='textarea'||f.type==='url') && typeof v==='string' && /[<>]/.test(v)) errs.push(`«${f.label}» contiene los caracteres < o >, que no se permiten.`);
+      if(f.type==='url' && !/^https?:\/\/\S+$/i.test(String(v))) errs.push(`«${f.label}» debe ser un enlace que empiece con http:// o https://.`);
+    }
+  });
+  if(c.id && !/^[a-z0-9][a-z0-9_-]*$/.test(c.id)) errs.push('El ID solo puede tener minúsculas, números, guiones y guion bajo (sin espacios ni tildes).');
+  if(c.id && otherIds.has(c.id)) errs.push(`Ya existe otro caso con el ID «${c.id}».`);
+  if(typeof c.anioInicio==='number' && (!Number.isInteger(c.anioInicio) || c.anioInicio<1900 || c.anioInicio>2100)) errs.push('«Año de inicio» debe ser un año entero entre 1900 y 2100.');
+  if(typeof c.anioFin==='number' && typeof c.anioInicio==='number' && c.anioFin < c.anioInicio) errs.push('«Año de término» no puede ser anterior al año de inicio.');
+  if(typeof c.monto==='number' && c.monto<0) errs.push('«Monto» no puede ser negativo.');
+  return errs;
+}
+function uniqueId(base, taken){ let id=base||'caso', n=2; while(taken.has(id)) id = `${base}-${n++}`; return id; }
+function autoId(c, taken){
+  const p = c.nivel==='Municipal'?'m':c.nivel==='Regional'?'r':'n';
+  const base = [p, slug(c.comuna||'nacional'), slug(c.titulo).slice(0,28), c.anioInicio].filter(Boolean).join('-').replace(/-+/g,'-');
+  return uniqueId(base, taken);
+}
+
+/* ======================================================================
+   EDITOR (FORMULARIO)
+   ====================================================================== */
+function buildForm(){
+  $('#editor-grid').innerHTML = FIELDS.map(f=>{
+    const id = 'f_'+f.key, req = f.required?' <span class="req" aria-hidden="true">*</span>':'';
+    let input;
+    if(f.type==='select') input = `<select id="${id}">${f.options.map(o=>`<option value="${esc(o)}">${esc((f.labels&&f.labels[o])||o)}</option>`).join('')}</select>`;
+    else if(f.type==='textarea') input = `<textarea id="${id}"></textarea>`;
+    else input = `<input type="text" id="${id}" ${f.type==='number'?'inputmode="decimal"':''} autocomplete="off">`;
+    return `<div class="${f.wide||f.type==='textarea'?'wide':''}"><label class="fld" for="${id}">${esc(f.label)}${req}</label>${input}${f.help?`<div class="help">${esc(f.help)}</div>`:''}</div>`;
+  }).join('');
+}
+buildForm();
+function parseNum(v){ v = String(v).trim().replace(/\s/g,''); if(/^-?\d+,\d+$/.test(v)) v=v.replace(',','.'); const n = Number(v); return (v!=='' && isFinite(n)) ? n : v; }
+function formToCase(){
+  const out = {};
+  FIELDS.forEach(f=>{
+    const el = $('#f_'+f.key); let v = el.value.trim();
+    if(v===''){ out[f.key]=null; return; }
+    out[f.key] = f.type==='number' ? parseNum(v) : v;
+  });
+  return out;
+}
+function openEditor(i, preset){
+  editingIndex = i;
+  const c = preset || (i===null ? {categoria:'economico', nivel:'Municipal', sector:'Independiente', estadoCategoria:'investigacion'} : cases[i]);
+  FIELDS.forEach(f=>{ const el=$('#f_'+f.key); const v=c[f.key]; el.value = (v===null||v===undefined)?'':String(v); });
+  $('#editor-title').textContent = i===null ? 'Nuevo caso' : 'Editar caso';
+  $('#editor-errors').hidden = true;
+  $('#editor-overlay').hidden = false;
+  $('#editor-overlay .drawer').scrollTop = 0;
+  setTimeout(()=>$('#f_titulo').focus(), 30);
+}
+function closeEditor(){ $('#editor-overlay').hidden = true; }
+$('#editor-cancel').addEventListener('click', closeEditor);
+$('#btn-new').addEventListener('click', ()=>openEditor(null));
+$('#editor-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const vals = formToCase();
+  const merged = editingIndex===null ? normalizeCase(vals) : {...cases[editingIndex], ...vals};
+  const taken = new Set(cases.filter((_,i)=>i!==editingIndex).map(c=>c.id));
+  if(!merged.id) merged.id = autoId(merged, taken);
+  const errs = validateCase(merged, taken);
+  if(errs.length){ const box=$('#editor-errors'); box.innerHTML = `<strong>Revisa estos puntos antes de guardar:</strong><ul>${errs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`; box.hidden=false; $('#editor-overlay .drawer').scrollTop=0; return; }
+  const finalCase = normalizeCase(merged);
+  if(editingIndex===null) cases.push(finalCase); else cases[editingIndex]=finalCase;
+  closeEditor(); render(); toast(editingIndex===null?'Caso agregado al borrador.':'Caso actualizado en el borrador.','ok');
+});
+
+/* ======================================================================
+   CSV
+   ====================================================================== */
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF) text = text.slice(1);
+  let delim=',', inQ=false, sc=0, cc=0;
+  for(const ch of text){ if(ch==='"') inQ=!inQ; else if(!inQ){ if(ch==='\n'||ch==='\r') break; if(ch===';') sc++; else if(ch===',') cc++; } }
+  if(sc>cc) delim=';';
+  const rows=[]; let row=[], f='', q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){ f+='"'; i++; } else q=false; } else f+=ch; }
+    else if(ch==='"') q=true;
+    else if(ch===delim){ row.push(f); f=''; }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r' && text[i+1]==='\n') i++; row.push(f); f=''; rows.push(row); row=[]; }
+    else f+=ch;
+  }
+  if(f!=='' || row.length){ row.push(f); rows.push(row); }
+  return rows.filter(r=>r.some(c=>String(c).trim()!==''));
+}
+function toCSV(list, delim){
+  const q = v => { if(v===null||v===undefined) return ''; const s=String(v); return (s.includes(delim)||s.includes('"')||s.includes('\n')||s.includes('\r')) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+  return [FKEYS.join(delim)].concat(list.map(c=>FKEYS.map(k=>q(c[k])).join(delim))).join('\r\n')+'\r\n';
+}
+function download(name, content, mime){
+  const blob = new Blob([content], {type:mime}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+const stamp = () => new Date().toISOString().slice(0,10);
+$('#btn-export').addEventListener('click', ()=>{ download(`casos-${stamp()}.csv`, '\ufeff'+toCSV(cases, $('#csv-delim').value), 'text/csv;charset=utf-8'); toast(`Exportados ${cases.length} casos a CSV.`,'ok'); });
+$('#btn-json').addEventListener('click', ()=>{ download('casos.json', JSON.stringify(cases,null,2)+'\n', 'application/json'); toast('JSON descargado.','ok'); });
+
+function matchOption(f, v){
+  const low = v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  for(const o of f.options){
+    const cands=[o, (f.labels&&f.labels[o])||''].map(x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''));
+    if(cands.includes(low)) return o;
+  }
+  return v;
+}
+function buildImportPlan(text){
+  const rows = parseCSV(text);
+  if(rows.length<2) throw new Error('El archivo no tiene filas de datos.');
+  const header = rows[0].map(h=>h.trim()); const idx = {};
+  header.forEach((h,i)=>{ const k = FKEYS.find(k=>k.toLowerCase()===h.toLowerCase()); if(k) idx[k]=i; });
+  if(idx.id===undefined) throw new Error('Falta la columna «id» en los encabezados. Usa la plantilla o un CSV exportado desde este panel.');
+  const unknown = header.filter(h=>h && !FKEYS.some(k=>k.toLowerCase()===h.toLowerCase()));
+  const existing = new Map(cases.map(c=>[c.id,c]));
+  const seen = new Set(); const plan = {items:[], errors:[], unknown, nNew:0, nChanged:0, nSame:0};
+  const takenAll = new Set(cases.map(c=>c.id));
+  rows.slice(1).forEach((row,ri)=>{
+    const line = ri+2; const partial = {};
+    const idCell = (row[idx.id]??'').trim();
+    const base = idCell && existing.has(idCell) ? existing.get(idCell) : null;
+    FIELDS.forEach(f=>{
+      const i = idx[f.key]; if(i===undefined){ return; }
+      const v = (row[i]??'').trim();
+      if(v===''){ if(!base) partial[f.key]=null; return; }   // celda vacía en un caso existente = no modificar
+      partial[f.key] = f.type==='number' ? parseNum(v) : f.type==='select' ? matchOption(f,v) : v;
+    });
+    let merged = base ? {...base} : normalizeCase({});
+    Object.keys(partial).forEach(k=>{ merged[k]=partial[k]; });
+    if(!merged.categoria) merged.categoria='economico';
+    if(!merged.id){ merged.id = autoId(merged, new Set([...takenAll, ...seen])); }
+    if(seen.has(merged.id)){ plan.errors.push({line, msgs:[`El ID «${merged.id}» está repetido dentro del CSV.`]}); return; }
+    const errs = validateCase(merged, new Set());               // el id ya se resolvió contra "seen"
+    if(errs.length){ plan.errors.push({line, msgs:errs, id:merged.id}); return; }
+    seen.add(merged.id); merged = normalizeCase(merged);
+    const kind = base ? (JSON.stringify(normalizeCase(base))===JSON.stringify(merged)?'same':'changed') : 'new';
+    plan.items.push({kind, case:merged}); if(kind==='new') plan.nNew++; else if(kind==='changed') plan.nChanged++; else plan.nSame++;
+  });
+  plan.csvIds = new Set(plan.items.map(i=>i.case.id));
+  plan.nDeleteIfReplace = cases.filter(c=>!plan.csvIds.has(c.id)).length;
+  return plan;
+}
+function openImport(){ $('#import-file').value=''; $('#import-step1').hidden=false; $('#import-step2').hidden=true; $('#import-apply').disabled=true; importPlan=null; $('#import-overlay').hidden=false; }
+$('#btn-import').addEventListener('click', openImport);
+$('#import-cancel').addEventListener('click', ()=>$('#import-overlay').hidden=true);
+$('#import-file').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  try{
+    importPlan = buildImportPlan(await file.text());
+    const p = importPlan;
+    $('#import-stats').innerHTML = [['Nuevos',p.nNew],['Actualizados',p.nChanged],['Sin cambios',p.nSame],['Con errores',p.errors.length]].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+    let html = '';
+    if(p.unknown.length) html += `<div class="alert alert-warn">Columnas ignoradas por no ser campos conocidos: ${esc(p.unknown.join(', '))}.</div>`;
+    if(p.errors.length) html += `<div class="errs"><strong>Filas que no se importarán (corrígelas en el CSV y vuelve a cargarlo):</strong><ul>${p.errors.slice(0,40).map(er=>`<li>Fila ${er.line}${er.id?` (${esc(er.id)})`:''}: ${esc(er.msgs.join(' '))}</li>`).join('')}${p.errors.length>40?`<li>… y ${p.errors.length-40} más.</li>`:''}</ul></div>`;
+    $('#import-errors').innerHTML = html;
+    const li = (arr)=>arr.length?`<ul class="mini">${arr.slice(0,60).map(i=>`<li>${esc(i.case.titulo)}</li>`).join('')}</ul>`:'';
+    const nw = p.items.filter(i=>i.kind==='new'), ch = p.items.filter(i=>i.kind==='changed');
+    $('#import-lists').innerHTML = (nw.length?`<div class="fld">Casos nuevos</div>${li(nw)}`:'') + (ch.length?`<div class="fld">Casos que se actualizarán</div>${li(ch)}`:'');
+    $('#import-del-count').textContent = p.nDeleteIfReplace;
+    $('#import-step2').hidden = false; $('#import-apply').disabled = !(p.nNew+p.nChanged) && !p.nDeleteIfReplace;
+  }catch(err){ importPlan=null; $('#import-step2').hidden=true; $('#import-apply').disabled=true; toast(err.message,'err'); }
+});
+$('#import-apply').addEventListener('click', ()=>{
+  if(!importPlan) return;
+  const mode = document.querySelector('input[name=imode]:checked').value;
+  if(mode==='replace'){
+    if(importPlan.nDeleteIfReplace && !confirm(`Reemplazar todo eliminará ${importPlan.nDeleteIfReplace} casos que no están en el CSV. ¿Continuar?`)) return;
+    cases = importPlan.items.map(i=>i.case);
+  } else {
+    importPlan.items.forEach(it=>{ if(it.kind==='same') return; const k=cases.findIndex(c=>c.id===it.case.id); if(k>=0) cases[k]=it.case; else cases.push(it.case); });
+  }
+  $('#import-overlay').hidden=true; render(); toast('CSV aplicado al borrador. Revisa y pulsa «Publicar cambios».','ok');
+});
+
+/* ======================================================================
+   PUBLICAR
+   ====================================================================== */
+function listHtml(title, ids, titleOf){ return ids.length?`<div class="fld">${title}</div><ul class="mini">${ids.slice(0,40).map(id=>`<li>${esc(titleOf(id))}</li>`).join('')}${ids.length>40?`<li>… y ${ids.length-40} más</li>`:''}</ul>`:''; }
+$('#btn-publish').addEventListener('click', ()=>{
+  const d = computeDiff(); const cur = new Map(cases.map(c=>[c.id,c.titulo]));
+  $('#publish-path').textContent = session.path;
+  $('#publish-stats').innerHTML = [['Agregados',d.added.length],['Editados',d.modified.length],['Eliminados',d.deleted.length],['Total final',cases.length]].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+  $('#publish-lists').innerHTML = listHtml('Casos agregados',d.added,id=>cur.get(id)) + listHtml('Casos editados',d.modified,id=>cur.get(id)) + listHtml('Casos eliminados',d.deleted,id=>d.origTitles.get(id));
+  $('#publish-msg').value = `Actualiza casos (+${d.added.length} ~${d.modified.length} -${d.deleted.length})`;
+  $('#publish-error').hidden = true; $('#publish-overlay').hidden = false;
+});
+$('#publish-cancel').addEventListener('click', ()=>$('#publish-overlay').hidden=true);
+$('#publish-confirm').addEventListener('click', async ()=>{
+  const btn=$('#publish-confirm'); btn.disabled=true; btn.textContent='Publicando…'; $('#publish-error').hidden=true;
+  try{
+    const body = {message: $('#publish-msg').value.trim() || 'Actualiza casos', content: utf8ToB64(JSON.stringify(cases,null,2)+'\n'), sha, branch: session.branch};
+    const res = await gh(`/repos/${session.owner}/${session.repo}/contents/${encPath(session.path)}`, {method:'PUT', body: JSON.stringify(body)});
+    sha = res.content.sha; snapshot = JSON.stringify(cases);
+    $('#publish-overlay').hidden = true; render(); toast('Cambios publicados. El sitio se actualiza en 1 a 2 minutos.','ok');
+  }catch(err){
+    if(err.status===401){ $('#publish-overlay').hidden=true; toast(friendlyError(err),'err'); return; }
+    const e=$('#publish-error'); e.textContent=friendlyError(err); e.hidden=false;
+  }finally{ btn.disabled=false; btn.textContent='Publicar'; }
+});
+$('#btn-reload').addEventListener('click', async ()=>{
+  if(pendingCount()>0 && !confirm('Recargar descarta los cambios no publicados. ¿Continuar?')) return;
+  try{ await loadRemote(); render(); toast('Datos recargados desde GitHub.','ok'); }catch(err){ toast(friendlyError(err),'err'); }
+});
+
+/* cierre de modales con Escape */
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ ['#editor-overlay','#import-overlay','#publish-overlay'].forEach(s=>$(s).hidden=true); } });
+</script>
+</body>
+</html>

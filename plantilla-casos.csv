@@ -1,0 +1,2 @@
+﻿id;titulo;personas;partido;sector;nivel;comuna;imagen;anioInicio;anioFin;monto;montoNota;categoria;delito;estadoCategoria;estado;descripcion;fuente;fuenteLabel
+m-ejemplo-2026;Título corto del caso;Nombre y cargo de la persona involucrada;UDI;Derecha;Municipal;Providencia;;2026;;150;A qué corresponde el monto (o dejar vacío);economico;;investigacion;"Texto corto del estado, ej: Formalizado; arresto domiciliario";2 a 4 frases en tono neutro, distinguiendo acusación de condena.;https://enlace-a-la-fuente;Nombre del medio
