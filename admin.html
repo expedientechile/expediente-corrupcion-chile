@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Administración · Expediente Público</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%20width=%2264%22%20height=%2264%22%3E%3Crect%20x=%2212%22%20y=%226%22%20width=%2234%22%20height=%2246%22%20rx=%223%22%20fill=%22%23f4f5f1%22%20stroke=%22%23161c2b%22%20stroke-width=%223%22/%3E%3Cpath%20d=%22M36%206v10h10%22%20fill=%22none%22%20stroke=%22%23161c2b%22%20stroke-width=%223%22%20stroke-linejoin=%22round%22/%3E%3Cpath%20d=%22M19%2024h20M19%2032h14M19%2040h10%22%20stroke=%22%23161c2b%22%20stroke-width=%223%22%20stroke-linecap=%22round%22/%3E%3Ccircle%20cx=%2242%22%20cy=%2242%22%20r=%2210%22%20fill=%22%23f4f5f1%22%20stroke=%22%238b2e2e%22%20stroke-width=%224%22/%3E%3Cpath%20d=%22M49.5%2049.5L58%2058%22%20stroke=%22%238b2e2e%22%20stroke-width=%225%22%20stroke-linecap=%22round%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -62,7 +63,10 @@
   /* ---------- app shell ---------- */
   .topbar{background:var(--raised); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20;}
   .topbar-in{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; flex-wrap:wrap; gap:12px 16px; align-items:center; justify-content:space-between;}
-  .brand{display:flex; flex-direction:column;}
+  .brand{display:flex; flex-direction:row; align-items:center; gap:10px;}
+  .brand-txt{display:flex; flex-direction:column;}
+  .brand .logo-mark{flex:none;}
+  .login-logo{margin-bottom:10px;}
   .brand h1{font-size:1.1rem;}
   .brand .repo{font-size:0.76rem; color:var(--faint);}
   .top-actions{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
@@ -135,6 +139,7 @@
 <!-- ============================ LOGIN ============================ -->
 <div class="login-wrap" id="login-view">
   <form class="login-card" id="login-form" autocomplete="off">
+    <div class="login-logo"><svg class="logo-mark" viewBox="0 0 64 64" width="40" height="40" aria-hidden="true" focusable="false"><rect x="12" y="6" width="34" height="46" rx="3" fill="var(--raised)" stroke="var(--ink)" stroke-width="3"/><path d="M36 6v10h10" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/><path d="M19 24h20M19 32h14M19 40h10" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><circle cx="42" cy="42" r="10" fill="var(--raised)" stroke="var(--stamp)" stroke-width="4"/><path d="M49.5 49.5L58 58" stroke="var(--stamp)" stroke-width="5" stroke-linecap="round"/></svg></div>
     <h1>Administración del expediente</h1>
     <p class="sub">Ingresa con un token de GitHub. Solo quien tenga permiso de escritura en el repositorio puede guardar cambios.</p>
     <div id="login-error" class="alert alert-err" hidden></div>
@@ -165,8 +170,11 @@
   <header class="topbar">
     <div class="topbar-in">
       <div class="brand">
+        <svg class="logo-mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false"><rect x="12" y="6" width="34" height="46" rx="3" fill="var(--raised)" stroke="var(--ink)" stroke-width="3"/><path d="M36 6v10h10" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/><path d="M19 24h20M19 32h14M19 40h10" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><circle cx="42" cy="42" r="10" fill="var(--raised)" stroke="var(--stamp)" stroke-width="4"/><path d="M49.5 49.5L58 58" stroke="var(--stamp)" stroke-width="5" stroke-linecap="round"/></svg>
+        <div class="brand-txt">
         <h1>Casos del expediente</h1>
         <span class="repo mono" id="repo-label"></span>
+        </div>
       </div>
       <div class="top-actions">
         <span class="pending zero" id="pending-badge">Sin cambios</span>
