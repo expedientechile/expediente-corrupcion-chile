@@ -12,8 +12,12 @@ expediente-corrupcion-chile/
 ├── casos.csv             ← copia de todos los casos en formato CSV (para Excel / Google Sheets).
 ├── plantilla-casos.csv   ← CSV vacío con los encabezados y una fila de ejemplo.
 ├── plantilla-caso.json   ← un caso en blanco en formato JSON.
+├── favicon.svg, favicon.ico, favicon-48x48.png, favicon-96x96.png, favicon-192x192.png, apple-touch-icon.png
+│                         ← el logo de la pestaña del navegador y de Google (ver más abajo).
 └── README.md             ← este archivo
 ```
+
+**Importante:** sube *todos* estos archivos al repositorio, incluidos los de logo. Google no puede leer un ícono incrustado en el HTML: necesita encontrar los archivos `favicon.*` en la misma carpeta que `index.html`.
 
 `index.html` carga `casos.json` automáticamente al abrirse (con `fetch('casos.json')`). Por eso **los dos archivos siempre tienen que estar juntos, en la misma carpeta**, tanto en tu computador como en el hosting. Si subes solo el HTML, la página va a cargar pero se va a ver vacía (sin casos).
 
@@ -206,3 +210,11 @@ Al importar, el panel muestra una **vista previa** (cuántos casos son nuevos, c
 
 - Si el archivo `casos.json` crece mucho y se vuelve incómodo de editar a mano, puedes migrar a una hoja de Google Sheets y exportarla a JSON, o a una base de datos real (Airtable, Supabase). Mientras el formato final que le llega a `index.html` sea un array JSON con estos mismos campos, la página sigue funcionando igual.
 - Si quieres un dominio propio (en vez de `.github.io` o `.netlify.app`), tanto GitHub Pages como Netlify permiten conectar un dominio comprado en cualquier proveedor (NIC Chile, GoDaddy, etc.) desde su panel de configuración.
+
+
+## 9. Logo en Google, buscador y modo claro/oscuro
+
+- **Logo en los resultados de Google.** Google solo muestra el ícono si puede descargar un archivo real (`favicon.ico` o `favicon.svg`, cuadrado, de tamaño múltiplo de 48 px) desde la raíz del sitio, y si la página está indexada. Una vez publicados los archivos, entra a Google Search Console, usa **Inspección de URL → Solicitar indexación** con la dirección de tu sitio y espera: Google puede tardar desde unos días hasta algunas semanas en actualizar el ícono. Mientras tanto no hay nada más que hacer.
+- **Buscador principal.** Está bajo el título de la página. Busca en nombre, partido, sector, comuna, región, delito, estado y descripción; ignora tildes y mayúsculas, y si escribes varias palabras exige que aparezcan todas ("reyes cohecho"). Enter lleva a los resultados y Esc borra.
+- **Modo claro/oscuro.** El botón con luna/sol (arriba a la derecha) cambia el tema y recuerda tu elección en ese navegador. Si nunca lo has usado, la página sigue el modo de tu dispositivo.
+- El panel `admin.html` lleva `noindex` para que Google no lo muestre en las búsquedas.

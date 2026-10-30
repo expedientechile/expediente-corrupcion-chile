@@ -1473,5 +1473,23 @@
     "descripcion": "El alcalde de Chillán Viejo fue detenido por Carabineros horas después de ser reelecto en octubre de 2024, acusado de violencia intrafamiliar; al momento de la detención se encontraba en estado de ebriedad y la víctima presentó lesiones leves. Posteriormente, el Ministerio Público decidió formalizarlo además por los delitos de abuso sexual y violación, tras dos años de investigación a partir de denuncias de exfuncionarias municipales. Permaneció en el cargo durante todo el proceso.",
     "fuente": "https://www.biobiochile.cl/noticias/nacional/chile/2024/10/28/detienen-a-alcalde-recien-reelecto-de-chillan-viejo-jorge-del-pozo-por-violencia-intrafamiliar.shtml",
     "fuenteLabel": "BioBioChile"
+  },
+  {
+    "id": "m-riobueno-reyes",
+    "titulo": "Cohecho agravado y lavado de activos en licitaciones municipales",
+    "personas": "Luis Roberto Reyes Álvarez, alcalde",
+    "partido": "UDI",
+    "sector": "Derecha",
+    "nivel": "Municipal",
+    "comuna": "Río Bueno",
+    "anioInicio": 2017,
+    "anioFin": null,
+    "monto": 36.36,
+    "montoNota": "Al menos $36,36 millones en beneficios indebidos según los hechos formalizados por la Fiscalía (unos $27,86 millones provendrían del empresario Héctor Meza; más $18 millones en multas dejadas sin efecto, $3 millones por la Semana Riobuenina 2020 y $5,5 millones de Constructora San Ignacio). La prensa reporta además depósitos y transferencias de origen aún no acreditado que no se suman aquí.",
+    "estadoCategoria": "formalizado",
+    "estado": "Formalizado; en prisión preventiva desde el 21-10-2026 (investigación de 100 días)",
+    "descripcion": "La Fiscalía de Los Ríos lo formalizó por cohecho agravado reiterado y lavado de activos por hechos ocurridos entre 2017 y 2022: habría recibido pagos de empresarios y contratistas a cambio de favorecerlos en licitaciones y trámites municipales, y las transferencias habrían llegado a cuentas personales suyas y de su pareja. El Juzgado de Garantía de Río Bueno decretó prisión preventiva, igual que para el empresario Héctor Meza. La prensa lo identifica con la UDI (T13 lo ubica electo en 2024 en cupo UDI; otros medios lo describen como militante o exmilitante). La investigación estaba precedida por alertas ciudadanas a Contraloría desde 2023. Los hechos son imputaciones de la Fiscalía; rige la presunción de inocencia hasta sentencia firme.",
+    "fuente": "https://www.cooperativa.cl/noticias/pais/alcalde-de-rio-bueno-va-preso-por-cohecho-reiterado-y-lavado-de-activos/2026-10-22/094946.html",
+    "fuenteLabel": "Cooperativa (22-10-2026)"
   }
 ]
